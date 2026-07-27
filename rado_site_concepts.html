@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>РАДО — 10 вариантов витрины</title>
+<style>
+:root{--bg:#050b16;--panel:rgba(255,255,255,.08);--line:rgba(160,205,255,.22);--blue:#2a8cff;--red:#ef352e;--txt:#f4f8ff;--muted:#9db3d0}
+*{box-sizing:border-box}
+body{margin:0;background:#050b16;color:var(--txt);font-family:Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body:before{content:"";position:fixed;inset:0;background:url("public/rado-ai-hero.png") center/cover no-repeat;opacity:.65;z-index:-2}
+body:after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,11,22,.35),#050b16 62%);z-index:-1}
+.wrap{max-width:1260px;margin:auto;padding:42px 22px}
+.hero{min-height:280px;display:flex;flex-direction:column;justify-content:end;padding-bottom:28px}
+.kicker{color:#b9d8ff;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+h1{font-size:58px;line-height:.98;margin:14px 0 12px;max-width:900px}
+.lead{color:#c7d7ee;font-size:19px;max-width:780px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+.card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.055));backdrop-filter:blur(18px);padding:20px;min-height:300px;box-shadow:0 22px 80px rgba(0,0,0,.35);position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 0,rgba(42,140,255,.22),transparent 34%);pointer-events:none}
+.num{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--blue),#72c4ff);display:grid;place-items:center;font-weight:900}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}
+.tag{border:1px solid var(--line);border-radius:999px;padding:8px 10px;color:#d6e9ff;font-weight:800;font-size:12px}
+h2{margin:18px 0 8px;font-size:28px}
+p{color:#b7c9e5;line-height:1.45}
+.preview{height:108px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);margin:16px 0;position:relative;overflow:hidden}
+.preview .tire{position:absolute;width:88px;height:88px;border-radius:50%;border:18px solid rgba(160,210,255,.38);right:24px;top:10px;box-shadow:0 0 34px rgba(42,140,255,.35),inset 0 0 18px rgba(42,140,255,.2)}
+.preview .pane{position:absolute;border:1px solid rgba(150,210,255,.24);background:rgba(255,255,255,.07);border-radius:18px}
+.preview .p1{width:46%;height:62%;left:16px;top:20px}.preview .p2{width:24%;height:78%;left:52%;top:12px}
+.preview .line{position:absolute;left:-10%;right:-10%;top:62%;height:2px;background:linear-gradient(90deg,transparent,#2a8cff,#ef352e,transparent)}
+.bullets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bullets span{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 9px;font-size:12px;color:#dceaff}
+.pick{margin-top:14px;color:#fff;font-weight:900}
+@media(max-width:850px){.grid{grid-template-columns:1fr}h1{font-size:40px}.card{min-height:auto}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">RADO format exploration</div>
+    <h1>10 разных форматов сайта, не только лендинг</h1>
+    <div class="lead">Это не финальный дизайн, а доска выбора направления. Сначала выбираем формат, потом делаем один вариант дорого и глубоко.</div>
+  </section>
+  <section class="grid">
+    <article class="card"><div class="top"><div class="num">01</div><div class="tag">AI-тоннель</div></div><h2>Тоннель подбора</h2><p>Пользователь не видит каталог сразу. Он проходит 3 шага: авто/размер → сезон → бюджет. В конце получает 3 комплекта.</p><div class="preview"><i class="pane p1"></i><i class="pane p2"></i><i class="line"></i><i class="tire"></i></div><div class="bullets"><span>максимум конверсии</span><span>меньше выбора</span><span>ощущение AI</span></div><div class="pick">Лучше для лидов.</div></article>
+    <article class="card"><div class="top"><div class="num">02</div><div class="tag">3D showroom</div></div><h2>3D-витрина шин</h2><p>В центре вращающаяся шина/колесо, вокруг плавающие карточки размеров и цены. Каталог открывается как слои интерфейса.</p><div class="preview"><i class="tire" style="left:50%;right:auto;transform:translateX(-50%)"></i><i class="pane p1"></i><i class="pane p2"></i></div><div class="bullets"><span>дорого</span><span>запоминается</span><span>сильный wow</span></div><div class="pick">Лучше для бренда.</div></article>
+    <article class="card"><div class="top"><div class="num">03</div><div class="tag">Marketplace</div></div><h2>Премиум-магазин</h2><p>Не лендинг, а магазин: категории, фильтры, карточки, избранное, корзина-заявка. Визуально как дорогой AI-commerce.</p><div class="preview"><i class="pane p1" style="width:28%"></i><i class="pane p2" style="left:38%;width:28%"></i><i class="pane" style="right:16px;top:20px;width:24%;height:62%"></i></div><div class="bullets"><span>понятно клиенту</span><span>много SKU</span><span>масштабируется</span></div><div class="pick">Лучше как основа бизнеса.</div></article>
+    <article class="card"><div class="top"><div class="num">04</div><div class="tag">AI concierge</div></div><h2>Сайт-диалог</h2><p>Первый экран как чат: “Напишите авто или размер”. Ответы показывают карточки, альтернативы и комплект.</p><div class="preview"><i class="pane p1" style="height:30%;top:14px;width:70%"></i><i class="pane p1" style="top:58px;left:80px;width:62%;height:34%"></i><i class="line"></i></div><div class="bullets"><span>чувствуется AI</span><span>быстро</span><span>без каталожной усталости</span></div><div class="pick">Лучше для Telegram-трафика.</div></article>
+    <article class="card"><div class="top"><div class="num">05</div><div class="tag">Drops</div></div><h2>Дропы комплектов</h2><p>Каждый день 10 “горячих комплектов”: таймер, ограниченный остаток, скидка на объем, кнопка забрать.</p><div class="preview"><i class="line" style="top:30%"></i><i class="line" style="top:68%"></i><i class="tire"></i></div><div class="bullets"><span>ажиотаж</span><span>повторные визиты</span><span>акции</span></div><div class="pick">Лучше для канала.</div></article>
+    <article class="card"><div class="top"><div class="num">06</div><div class="tag">Stories</div></div><h2>Сторис-каталог</h2><p>Мобильный формат: вертикальные карточки как stories. Свайп: размер, цена, комплект, “забронировать”.</p><div class="preview"><i class="pane" style="left:38%;top:8px;width:24%;height:86%"></i><i class="tire" style="width:70px;height:70px;border-width:14px;right:42%"></i></div><div class="bullets"><span>мобилка</span><span>для соцсетей</span><span>быстрый просмотр</span></div><div class="pick">Лучше для прогрева.</div></article>
+    <article class="card"><div class="top"><div class="num">07</div><div class="tag">Garage OS</div></div><h2>Операционная панель</h2><p>Сайт выглядит как профессиональная система шинного склада: статусы, партии, наличие, подбор, экспорт заявки.</p><div class="preview"><i class="pane p1" style="width:34%;height:78%;top:12px"></i><i class="pane p2" style="width:52%;left:42%;height:24%;top:14px"></i><i class="pane p2" style="width:52%;left:42%;height:24%;top:56px"></i></div><div class="bullets"><span>B2B</span><span>СТО</span><span>опт</span></div><div class="pick">Лучше для партнеров.</div></article>
+    <article class="card"><div class="top"><div class="num">08</div><div class="tag">Configurator</div></div><h2>Конфигуратор авто</h2><p>Выбор марки/модели/года или размера. Далее сайт показывает совместимые комплекты и аналоги.</p><div class="preview"><i class="pane p1" style="width:80%;height:28%;top:16px"></i><i class="pane p1" style="width:38%;height:36%;top:62px"></i><i class="tire"></i></div><div class="bullets"><span>понятно новичкам</span><span>дороже чек</span><span>AI-подбор</span></div><div class="pick">Лучше для розницы.</div></article>
+    <article class="card"><div class="top"><div class="num">09</div><div class="tag">Map + delivery</div></div><h2>Карта наличия</h2><p>Склад/город/самовывоз/доставка. Клиент видит не просто товар, а маршрут получения.</p><div class="preview"><i class="line" style="transform:rotate(-12deg);top:48%"></i><i class="pane p1"></i><i class="tire" style="width:60px;height:60px;border-width:12px"></i></div><div class="bullets"><span>доверие</span><span>локальность</span><span>самовывоз</span></div><div class="pick">Лучше для Казани.</div></article>
+    <article class="card"><div class="top"><div class="num">10</div><div class="tag">Hybrid</div></div><h2>AI-магазин + тоннель</h2><p>Верх как дорогой AI-продукт, дальше две двери: “подобрать за 30 секунд” и “открыть весь каталог”.</p><div class="preview"><i class="pane p1" style="width:40%;height:70%"></i><i class="pane p2" style="left:54%;width:40%;height:70%"></i><i class="line"></i></div><div class="bullets"><span>универсально</span><span>и каталог</span><span>и лиды</span></div><div class="pick">Мой фаворит.</div></article>
+  </section>
+</main>
+</body>
+</html>
