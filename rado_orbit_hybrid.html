@@ -100,7 +100,7 @@ button { cursor: pointer; }
   top: 216px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
+  display: none;
   align-items: center;
   gap: 4px;
   padding: 5px;
@@ -137,7 +137,7 @@ button { cursor: pointer; }
   top: 86px;
   left: 50%;
   width: min(1180px, calc(100vw - 40px));
-  min-height: 112px;
+  min-height: 68px;
   transform: translateX(-50%);
   padding: 10px;
   border: 1px solid var(--line);
@@ -148,10 +148,11 @@ button { cursor: pointer; }
 }
 .market-search-row {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   gap: 8px;
 }
 .catalog-button,
+.filters-button,
 .search-submit {
   min-height: 48px;
   border: 1px solid var(--line);
@@ -169,6 +170,10 @@ button { cursor: pointer; }
   color: #fff;
   border-color: transparent;
   background: linear-gradient(135deg, #ff5149, #ff8243);
+}
+.filters-button {
+  color: #dceeff;
+  background: rgba(255,255,255,.07);
 }
 .market-input-wrap { position: relative; }
 .market-input-wrap input {
@@ -219,13 +224,22 @@ button { cursor: pointer; }
 .suggestion b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .suggestion span { color: #ff7b72; font-weight: 950; }
 .quick-row {
-  display: flex;
+  position: absolute;
+  z-index: 95;
+  top: 66px;
+  right: 92px;
+  display: none;
   align-items: center;
+  flex-wrap: wrap;
   gap: 7px;
-  margin-top: 9px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  width: min(620px, calc(100% - 20px));
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(4, 12, 25, .98);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .46);
 }
+.quick-row.open { display: flex; }
 .quick-row::-webkit-scrollbar { display: none; }
 .quick-label { color: var(--muted); font-size: 11px; font-weight: 850; white-space: nowrap; padding: 0 5px; }
 .quick-chip {
@@ -406,7 +420,7 @@ button { cursor: pointer; }
   position: absolute;
   z-index: 55;
   left: 30px;
-  top: 246px;
+  top: 112px;
   width: min(300px, calc(100vw - 60px));
   color: #dceeff;
   padding: 14px 42px 14px 0;
@@ -426,12 +440,12 @@ button { cursor: pointer; }
   letter-spacing: 0;
 }
 .ai-status p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.ai-status p { display: none; }
 .guide {
   position: absolute;
   z-index: 50;
   right: 30px;
-  top: 246px;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   color: var(--muted);
@@ -517,8 +531,7 @@ button { cursor: pointer; }
   .stock { display: none; }
   .top-note { display: none; }
   .step { min-width: 92px; }
-  .ai-status { top: 262px; left: 18px; }
-  .guide { top: 262px; right: 18px; }
+  .ai-status { top: 126px; left: 18px; }
   .orbit-option { width: 142px; min-height: 60px; }
   .result-dock { grid-template-columns: 1.3fr .7fr auto; }
   .result-dock .set-block { display: none; }
@@ -530,22 +543,26 @@ button { cursor: pointer; }
   .market-search {
     top: 76px;
     width: calc(100vw - 18px);
-    min-height: 124px;
+    min-height: 60px;
     padding: 8px;
   }
-  .market-search-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 5px; }
-  .catalog-button, .search-submit { min-height: 44px; padding: 0 10px; font-size: 11px; }
+  .market-search-row { grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 5px; }
+  .catalog-button, .filters-button, .search-submit { min-height: 44px; padding: 0 9px; font-size: 10px; }
   .market-input-wrap input { height: 44px; padding: 0 10px; font-size: 12px; }
-  .quick-row { margin-top: 8px; gap: 5px; }
+  .quick-row {
+    top: 58px;
+    right: 0;
+    width: 100%;
+    gap: 5px;
+  }
   .quick-chip { min-height: 32px; padding: 0 10px; font-size: 10px; }
   .quick-label { display: none; }
-  .stepper { top: 210px; width: calc(100vw - 20px); overflow-x: auto; justify-content: flex-start; }
+  .stepper { display: none; }
   .step { min-width: 86px; height: 36px; font-size: 11px; }
   .orbital-field { inset: 66px 0 0; }
-  .ai-status { top: 254px; left: 14px; width: 230px; }
+  .ai-status { top: 112px; left: 14px; width: 230px; }
   .ai-status h1 { font-size: 18px; }
   .ai-status p { font-size: 11px; }
-  .guide { top: 260px; right: 12px; }
   .guide span { display: none; }
   .centerpiece { top: 52%; width: clamp(220px, 66vw, 310px); }
   .space-grid { top: 53%; width: 130vw; height: 66vw; }
@@ -597,6 +614,7 @@ button { cursor: pointer; }
         <input id="aiSearch" placeholder="Размер, бренд или модель — например 195/65 R15" autocomplete="off">
         <div class="search-suggest" id="searchSuggest" hidden></div>
       </div>
+      <button class="filters-button" id="filtersBtn" aria-expanded="false">Фильтры</button>
       <button class="search-submit" id="searchBtn">Найти</button>
     </div>
     <div class="quick-row" aria-label="Быстрые фильтры">
@@ -926,11 +944,18 @@ document.querySelectorAll(".step").forEach((button) => {
   button.addEventListener("click", () => setMode(button.dataset.mode));
 });
 $("sizeCatalogBtn").addEventListener("click", () => setMode("size"));
+$("filtersBtn").addEventListener("click", () => {
+  const row = document.querySelector(".quick-row");
+  const open = !row.classList.contains("open");
+  row.classList.toggle("open", open);
+  $("filtersBtn").setAttribute("aria-expanded", String(open));
+});
 document.querySelectorAll("[data-quick-season]").forEach((button) => {
   button.addEventListener("click", () => {
     state = { mode: "result", size: "", season: button.dataset.quickSeason, budget: "", search: "", selectedArticle: "" };
     $("aiSearch").value = "";
     $("searchSuggest").hidden = true;
+    document.querySelector(".quick-row").classList.remove("open");
     render();
   });
 });
@@ -940,6 +965,7 @@ document.querySelectorAll("[data-quick-query]").forEach((button) => {
     state = { mode: "result", size: "", season: "", budget: "", search: query, selectedArticle: "" };
     $("aiSearch").value = query;
     $("searchSuggest").hidden = true;
+    document.querySelector(".quick-row").classList.remove("open");
     render();
   });
 });
@@ -948,6 +974,7 @@ document.querySelectorAll("[data-quick-budget]").forEach((button) => {
     state = { mode: "result", size: "", season: "", budget: button.dataset.quickBudget, search: "", selectedArticle: "" };
     $("aiSearch").value = "";
     $("searchSuggest").hidden = true;
+    document.querySelector(".quick-row").classList.remove("open");
     render();
   });
 });
@@ -1016,7 +1043,11 @@ $("searchSuggest").addEventListener("click", (event) => {
   render();
 });
 document.addEventListener("pointerdown", (event) => {
-  if (!event.target.closest(".market-search")) $("searchSuggest").hidden = true;
+  if (!event.target.closest(".market-search")) {
+    $("searchSuggest").hidden = true;
+    document.querySelector(".quick-row").classList.remove("open");
+    $("filtersBtn").setAttribute("aria-expanded", "false");
+  }
 });
 $("orderBtn").addEventListener("click", copyRequest);
 $("shareBtn").addEventListener("click", shareRequest);
