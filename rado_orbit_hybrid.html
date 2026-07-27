@@ -406,6 +406,12 @@ button { cursor: pointer; }
   object-fit: contain;
   filter: drop-shadow(0 35px 38px rgba(0, 0, 0, .58)) drop-shadow(0 0 20px rgba(98, 205, 255, .18));
   animation: tireFloat 5.5s ease-in-out infinite;
+  transition: opacity .2s ease;
+}
+.centerpiece img.actual-image {
+  filter: contrast(1.08) saturate(.9);
+  -webkit-mask-image: radial-gradient(ellipse 35% 58% at 50% 50%, #000 62%, rgba(0,0,0,.88) 76%, transparent 100%);
+  mask-image: radial-gradient(ellipse 35% 58% at 50% 50%, #000 62%, rgba(0,0,0,.88) 76%, transparent 100%);
 }
 @keyframes tireFloat {
   0%, 100% { transform: translateY(3px) rotate(-1deg); }
@@ -501,7 +507,7 @@ button { cursor: pointer; }
 .ai-status {
   position: absolute;
   z-index: 55;
-  left: 30px;
+  left: max(20px, calc((100vw - 1180px) / 2));
   top: 190px;
   width: min(300px, calc(100vw - 60px));
   color: #dceeff;
@@ -523,6 +529,20 @@ button { cursor: pointer; }
 }
 .ai-status p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
 .ai-status p { display: none; }
+.browse-results {
+  display: none;
+  min-height: 38px;
+  margin-top: 10px;
+  border: 1px solid rgba(142, 229, 255, .45);
+  border-radius: 11px;
+  color: #07111e;
+  background: linear-gradient(135deg, #eefaff, #76d5ff);
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 950;
+  box-shadow: 0 12px 35px rgba(71, 184, 255, .18);
+}
+.browse-results.visible { display: inline-flex; align-items: center; }
 .guide {
   position: absolute;
   z-index: 50;
@@ -608,12 +628,180 @@ button { cursor: pointer; }
   transition: .2s ease;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
+.results-browser {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) min(720px, 92vw);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .22s ease, visibility .22s ease;
+}
+.results-browser.open { visibility: visible; opacity: 1; }
+.results-backdrop {
+  border: 0;
+  background: rgba(1, 4, 10, .66);
+  backdrop-filter: blur(8px);
+}
+.results-panel {
+  min-width: 0;
+  min-height: 0;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  background: rgba(5, 13, 26, .97);
+  border-left: 1px solid var(--line);
+  box-shadow: -30px 0 100px rgba(0, 0, 0, .48);
+  transform: translateX(35px);
+  transition: transform .26s ease;
+}
+.results-browser.open .results-panel { transform: translateX(0); }
+.results-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 22px 16px;
+}
+.results-head-copy { min-width: 0; }
+.results-head h2 { margin: 0; font-size: 25px; letter-spacing: 0; }
+.results-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; font-weight: 750; }
+.results-close {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(255,255,255,.06);
+  font-size: 22px;
+}
+.results-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 8px;
+  padding: 0 22px 14px;
+}
+.results-tools input,
+.results-tools select {
+  width: 100%;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  outline: 0;
+  color: #eef8ff;
+  background: rgba(255,255,255,.065);
+  padding: 0 13px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.results-list {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 9px;
+  padding: 0 22px 18px;
+}
+.result-card {
+  min-width: 0;
+  min-height: 118px;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(151, 205, 255, .17);
+  border-radius: 14px;
+  color: #f4faff;
+  background: rgba(255,255,255,.045);
+  padding: 10px;
+  text-align: left;
+}
+.result-card:hover,
+.result-card:focus-visible {
+  border-color: rgba(110, 213, 255, .72);
+  background: rgba(38, 111, 164, .18);
+  outline: 0;
+}
+.result-card.selected {
+  border-color: #ff7465;
+  background: rgba(255, 84, 76, .11);
+}
+.result-card-image {
+  width: 88px;
+  height: 94px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #dcecf6;
+}
+.result-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.result-card-copy { min-width: 0; }
+.result-card-copy b {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+.result-card-copy span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+.result-card-copy strong {
+  display: block;
+  margin-top: 9px;
+  color: #ff7b72;
+  font-size: 18px;
+}
+.results-empty {
+  grid-column: 1 / -1;
+  padding: 60px 20px;
+  color: var(--muted);
+  text-align: center;
+}
+.results-pages {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 70px;
+  padding: 12px 22px;
+  border-top: 1px solid rgba(151, 205, 255, .14);
+}
+.page-info { color: var(--muted); font-size: 11px; font-weight: 850; }
+.page-controls { display: flex; gap: 7px; }
+.page-button {
+  min-width: 94px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: #eaf7ff;
+  background: rgba(255,255,255,.06);
+  font-size: 11px;
+  font-weight: 900;
+}
+.page-button:disabled { cursor: default; opacity: .35; }
 @media (max-width: 900px) {
   .topbar { padding: 0 16px; }
   .stock { display: none; }
   .top-note { display: none; }
   .step { min-width: 92px; }
-  .ai-status { top: 202px; left: 18px; }
+  .ai-status { top: 202px; left: 20px; }
   .orbit-option { width: 142px; min-height: 60px; }
   .result-dock { grid-template-columns: 1.3fr .7fr auto; }
   .result-dock .set-block { display: none; }
@@ -694,6 +882,17 @@ button { cursor: pointer; }
   .dock-actions .action:not(.primary) { display: none; }
   .action { min-height: 44px; padding: 0 12px; font-size: 12px; }
   .toast { bottom: 108px; }
+  .results-browser { grid-template-columns: 1fr; }
+  .results-backdrop { display: none; }
+  .results-panel { border-left: 0; }
+  .results-head { padding: 16px 14px 12px; }
+  .results-head h2 { font-size: 20px; }
+  .results-tools { grid-template-columns: 1fr; padding: 0 14px 10px; }
+  .results-list { grid-template-columns: 1fr; padding: 0 14px 12px; }
+  .result-card { min-height: 102px; grid-template-columns: 72px minmax(0, 1fr); }
+  .result-card-image { width: 72px; height: 78px; }
+  .results-pages { padding: 10px 14px; }
+  .page-button { min-width: 74px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -749,6 +948,7 @@ button { cursor: pointer; }
       <div class="eyebrow">AI-подбор в реальном времени</div>
       <h1 id="modeTitle">Выберите размер</h1>
       <p id="aiText">Потяните орбиту и нажмите на подходящий размер.</p>
+      <button class="browse-results" id="browseResults">Все варианты</button>
     </div>
     <div class="guide"><i>↔</i><span>тяните или прокручивайте орбиту</span></div>
     <div class="orbit-layer" id="orbitLayer"></div>
@@ -776,6 +976,35 @@ button { cursor: pointer; }
     </div>
   </aside>
   <div class="toast" id="toast">Заявка скопирована</div>
+  <section class="results-browser" id="resultsBrowser" aria-hidden="true">
+    <button class="results-backdrop" id="resultsBackdrop" aria-label="Закрыть каталог"></button>
+    <div class="results-panel" role="dialog" aria-modal="true" aria-labelledby="resultsTitle">
+      <header class="results-head">
+        <div class="results-head-copy">
+          <h2 id="resultsTitle">Все подходящие шины</h2>
+          <p id="resultsSubtitle">Выберите модель, и она появится в центре орбиты</p>
+        </div>
+        <button class="results-close" id="resultsClose" aria-label="Закрыть">×</button>
+      </header>
+      <div class="results-tools">
+        <input id="resultsSearch" placeholder="Поиск среди найденных: бренд или модель" autocomplete="off">
+        <select id="resultsSort" aria-label="Сортировка">
+          <option value="priceAsc">Сначала дешевле</option>
+          <option value="priceDesc">Сначала дороже</option>
+          <option value="stockDesc">Больше в наличии</option>
+          <option value="brandAsc">По бренду</option>
+        </select>
+      </div>
+      <div class="results-list" id="resultsList"></div>
+      <footer class="results-pages">
+        <span class="page-info" id="pageInfo"></span>
+        <div class="page-controls">
+          <button class="page-button" id="pagePrev">← Назад</button>
+          <button class="page-button" id="pageNext">Дальше →</button>
+        </div>
+      </footer>
+    </div>
+  </section>
 </main>
 
 <script>
@@ -830,6 +1059,8 @@ let dragStartX = 0;
 let dragStartRotation = 0;
 let lastFrame = performance.now();
 let optionElements = [];
+let resultsPage = 1;
+const RESULTS_PER_PAGE = 12;
 
 const $ = (id) => document.getElementById(id);
 const norm = (value) => String(value || "").toLowerCase().replace(/r/i, " r").replace(/\s+/g, " ").trim();
@@ -893,7 +1124,12 @@ function optionsForMode() {
       { value: "", label: "Без лимита", sub: "показать всё", active: state.budget === "" }
     ];
   }
-  return filteredItems().slice(0, 6).map((item) => ({
+  const rows = filteredItems();
+  const selected = rows.find((item) => item.article === state.selectedArticle);
+  const orbitRows = selected
+    ? [selected, ...rows.filter((item) => item.article !== selected.article)].slice(0, 6)
+    : rows.slice(0, 6);
+  return orbitRows.map((item) => ({
     value: item.article,
     label: item.brand,
     sub: `${item.model} · ${item.priceText}`,
@@ -997,8 +1233,17 @@ function positionOrbit() {
 
 function setCentralImage(item) {
   const target = $("centralTire");
-  target.src = "public/rado-tire-cutout.png";
-  target.style.mixBlendMode = "normal";
+  target.style.opacity = ".25";
+  window.setTimeout(() => {
+    target.src = item && item.image ? item.image : "public/rado-tire-cutout.png";
+    target.classList.toggle("actual-image", Boolean(item && item.image));
+    target.style.opacity = "1";
+  }, 110);
+  target.onerror = () => {
+    target.onerror = null;
+    target.src = "public/rado-tire-cutout.png";
+    target.classList.remove("actual-image");
+  };
   target.alt = item ? `Выбрано: ${item.title}` : "Автомобильная шина";
 }
 
@@ -1017,6 +1262,70 @@ function updateDock() {
   $("aiText").textContent = state.mode === "result"
     ? `Нашел ${rows.length} вариантов. Впереди самый выгодный, остальные вращаются вокруг шины.`
     : modeCopy[state.mode][1];
+  $("browseResults").classList.toggle("visible", state.mode === "result" && rows.length > 0);
+  $("browseResults").textContent = `Все ${variantsText(rows.length)}`;
+}
+
+function browserRows() {
+  const needle = norm($("resultsSearch").value);
+  const rows = filteredItems().filter((item) =>
+    !needle || norm([item.title, item.brand, item.model, item.size].join(" ")).includes(needle)
+  );
+  const sort = $("resultsSort").value;
+  return [...rows].sort((a, b) => {
+    if (sort === "priceDesc") return b.price - a.price;
+    if (sort === "stockDesc") return b.rest - a.rest;
+    if (sort === "brandAsc") return a.title.localeCompare(b.title, "ru");
+    return a.price - b.price;
+  });
+}
+
+function renderResultsBrowser() {
+  const rows = browserRows();
+  const pages = Math.max(1, Math.ceil(rows.length / RESULTS_PER_PAGE));
+  resultsPage = Math.min(resultsPage, pages);
+  const start = (resultsPage - 1) * RESULTS_PER_PAGE;
+  const visible = rows.slice(start, start + RESULTS_PER_PAGE);
+  $("resultsList").innerHTML = visible.length
+    ? visible.map((item) => `<button class="result-card ${item.article === state.selectedArticle ? "selected" : ""}" data-result-article="${esc(item.article)}">
+        <span class="result-card-image"><img src="${esc(item.image)}" alt=""></span>
+        <span class="result-card-copy">
+          <b>${esc(item.title)}</b>
+          <span>${esc(item.season || "сезон не указан")} · в наличии ${item.rest} шт.</span>
+          <strong>${esc(item.priceText)}</strong>
+        </span>
+      </button>`).join("")
+    : `<div class="results-empty">По этому запросу моделей нет</div>`;
+  $("pageInfo").textContent = rows.length
+    ? `${start + 1}–${Math.min(start + RESULTS_PER_PAGE, rows.length)} из ${rows.length}`
+    : "0 моделей";
+  $("pagePrev").disabled = resultsPage <= 1;
+  $("pageNext").disabled = resultsPage >= pages;
+  $("resultsSubtitle").textContent = `${variantsText(rows.length)} · нажмите на модель, чтобы поставить её в центр`;
+}
+
+function openResultsBrowser() {
+  resultsPage = 1;
+  $("resultsSearch").value = "";
+  renderResultsBrowser();
+  $("resultsBrowser").classList.add("open");
+  $("resultsBrowser").setAttribute("aria-hidden", "false");
+  window.setTimeout(() => $("resultsSearch").focus(), 220);
+}
+
+function closeResultsBrowser() {
+  $("resultsBrowser").classList.remove("open");
+  $("resultsBrowser").setAttribute("aria-hidden", "true");
+}
+
+function selectResultItem(article) {
+  const item = filteredItems().find((row) => row.article === article);
+  if (!item) return;
+  state.selectedArticle = article;
+  closeResultsBrowser();
+  rotation = -Math.PI / 2;
+  targetRotation = null;
+  render();
 }
 
 function render() {
@@ -1162,6 +1471,36 @@ $("showSelection").addEventListener("click", () => {
   $("aiSearch").value = "";
   $("searchSuggest").hidden = true;
   setMode("result");
+  window.setTimeout(openResultsBrowser, 180);
+});
+
+$("browseResults").addEventListener("click", openResultsBrowser);
+$("resultsClose").addEventListener("click", closeResultsBrowser);
+$("resultsBackdrop").addEventListener("click", closeResultsBrowser);
+$("resultsSearch").addEventListener("input", () => {
+  resultsPage = 1;
+  renderResultsBrowser();
+});
+$("resultsSort").addEventListener("change", () => {
+  resultsPage = 1;
+  renderResultsBrowser();
+});
+$("pagePrev").addEventListener("click", () => {
+  resultsPage = Math.max(1, resultsPage - 1);
+  renderResultsBrowser();
+  $("resultsList").scrollTop = 0;
+});
+$("pageNext").addEventListener("click", () => {
+  resultsPage += 1;
+  renderResultsBrowser();
+  $("resultsList").scrollTop = 0;
+});
+$("resultsList").addEventListener("click", (event) => {
+  const card = event.target.closest("[data-result-article]");
+  if (card) selectResultItem(card.dataset.resultArticle);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeResultsBrowser();
 });
 
 $("orbitalField").addEventListener("pointerdown", (event) => {
