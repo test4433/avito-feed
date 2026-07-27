@@ -2,706 +2,772 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>РАДО — 3D Orbit Hybrid</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030711">
+<title>РАДО — Орбитальный подбор шин</title>
 <style>
 :root {
-  --bg: #030813;
-  --panel: rgba(7, 17, 34, .68);
-  --panel2: rgba(255, 255, 255, .09);
-  --line: rgba(164, 207, 255, .23);
-  --blue: #35a5ff;
-  --blue2: #82d5ff;
-  --red: #ff4038;
-  --text: #f6fbff;
-  --muted: #aec3de;
+  --bg: #030711;
+  --ink: #f6fbff;
+  --muted: #9bb0c9;
+  --blue: #47b8ff;
+  --cyan: #8ee5ff;
+  --red: #ff544c;
+  --line: rgba(151, 205, 255, .24);
+  --glass: rgba(7, 16, 31, .64);
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html, body { margin: 0; width: 100%; min-height: 100%; }
 body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--text);
+  color: var(--ink);
   background: var(--bg);
   font-family: Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
 }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(3, 8, 19, .14), rgba(3, 8, 19, .94) 76%),
-    url("public/rado-ai-hero.png") center/cover no-repeat;
-  z-index: -3;
-}
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 70% 22%, rgba(53, 165, 255, .24), transparent 32%),
-    repeating-linear-gradient(90deg, rgba(117, 188, 255, .045) 0 1px, transparent 1px 92px);
-  z-index: -2;
-  animation: scan 18s linear infinite;
-}
-@keyframes scan { to { transform: translateX(92px); } }
-button, input, select { font: inherit; }
+button, input { font: inherit; }
 button { cursor: pointer; }
-.shell { max-width: 1440px; margin: 0 auto; padding: 0 24px; }
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  background: rgba(3, 8, 19, .58);
-  border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(22px);
-}
-.nav-inner { height: 72px; display: flex; align-items: center; gap: 18px; }
-.brand { font-size: 28px; font-weight: 950; letter-spacing: .02em; }
-.brand small { display: block; margin-top: 1px; color: var(--blue2); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
-.nav-links { margin-left: auto; display: flex; gap: 8px; }
-.nav-links a {
-  color: #dcecff;
-  text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  padding: 10px 12px;
-  font-weight: 900;
-}
-.nav-links a:hover { border-color: var(--line); background: rgba(255, 255, 255, .08); }
-.hero {
-  min-height: calc(100vh - 72px);
-  display: grid;
-  grid-template-columns: minmax(330px, 440px) minmax(700px, 1fr);
-  gap: 28px;
-  align-items: center;
-  padding: 32px 0 42px;
-}
-.intro { align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
-.kicker {
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .075);
-  color: #d5ebff;
-  padding: 8px 11px;
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-h1 {
-  margin: 18px 0 14px;
-  font-size: clamp(48px, 5.7vw, 88px);
-  line-height: .9;
-  letter-spacing: 0;
-}
-.grad {
-  color: transparent;
-  background: linear-gradient(90deg, #fff 0%, #87d5ff 48%, #ff7770 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-p { color: var(--muted); line-height: 1.5; font-size: 18px; }
-.status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
-.status {
-  min-height: 82px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, .07);
-  padding: 13px;
-}
-.status b { display: block; font-size: 22px; }
-.status span { display: block; color: var(--muted); font-weight: 800; font-size: 13px; margin-top: 4px; }
-.cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.btn {
-  min-height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, .08);
-  color: #fff;
-  font-weight: 950;
-  padding: 12px 15px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn.primary { border-color: transparent; background: linear-gradient(135deg, var(--red), #ff7a3e); box-shadow: 0 18px 44px rgba(255, 64, 56, .26); }
-.btn.blue { border-color: transparent; background: linear-gradient(135deg, #138dff, #62d7ff); box-shadow: 0 18px 44px rgba(53, 165, 255, .24); }
-.stage {
-  min-height: 760px;
+.app {
+  height: 100dvh;
+  min-height: 700px;
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 38px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .045));
-  backdrop-filter: blur(22px);
-  box-shadow: 0 38px 120px rgba(0, 0, 0, .48);
-  perspective: 1200px;
-}
-.stage::before {
-  content: "";
-  position: absolute;
-  inset: 26px;
-  border-radius: 34px;
   background:
-    linear-gradient(90deg, transparent, rgba(53, 165, 255, .38), rgba(255, 64, 56, .26), transparent) 0 52% / 200% 2px no-repeat,
-    radial-gradient(circle at 50% 50%, rgba(53, 165, 255, .16), transparent 34%);
-  animation: pulseLine 5s ease-in-out infinite;
-  pointer-events: none;
+    linear-gradient(180deg, rgba(3, 7, 17, .22), rgba(3, 7, 17, .84)),
+    url("public/rado-ai-hero.png") center/cover no-repeat;
 }
-@keyframes pulseLine { 50% { background-position: 100% 52%, center; } }
-.orbit-system {
-  position: absolute;
-  inset: 58px;
-  transform-style: preserve-3d;
-}
-.orbit-ring {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border: 1px solid rgba(139, 205, 255, .24);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) rotateX(64deg);
-  pointer-events: none;
-}
-.ring-a { width: min(88%, 700px); aspect-ratio: 1 / .42; animation: slowSpin 30s linear infinite; }
-.ring-b { width: min(72%, 560px); aspect-ratio: 1 / .48; animation: slowSpinReverse 38s linear infinite; border-color: rgba(255, 88, 76, .20); }
-.ring-c { width: min(55%, 420px); aspect-ratio: 1 / .54; animation: slowSpin 46s linear infinite; }
-@keyframes slowSpin { to { transform: translate(-50%, -50%) rotateX(64deg) rotateZ(360deg); } }
-@keyframes slowSpinReverse { to { transform: translate(-50%, -50%) rotateX(64deg) rotateZ(-360deg); } }
-.center-tire {
-  position: absolute;
-  left: 50%;
-  top: 49%;
-  width: min(36vw, 360px);
-  height: min(36vw, 360px);
-  min-width: 240px;
-  min-height: 240px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  isolation: isolate;
-}
-.center-tire::before {
+.app::before {
   content: "";
   position: absolute;
-  inset: 7%;
-  border-radius: 50%;
-  border: clamp(38px, 5vw, 64px) solid rgba(129, 196, 246, .32);
-  box-shadow: 0 0 90px rgba(53, 165, 255, .40), inset 0 0 52px rgba(3, 8, 19, .72);
-  animation: tirePulse 3.8s ease-in-out infinite;
-  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(17, 114, 189, .28), transparent 34%),
+    linear-gradient(90deg, rgba(3, 7, 17, .75), transparent 30%, transparent 70%, rgba(3, 7, 17, .72)),
+    repeating-linear-gradient(90deg, rgba(105, 185, 255, .04) 0 1px, transparent 1px 96px);
+  pointer-events: none;
+  animation: ambient 18s linear infinite;
 }
-.center-tire::after {
-  content: "";
+@keyframes ambient { to { background-position: center, center, 96px 0; } }
+.topbar {
   position: absolute;
-  width: 34%;
-  height: 34%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(7, 17, 34, .96), rgba(7, 17, 34, .62));
-  box-shadow: inset 0 0 28px rgba(255, 255, 255, .07);
-  z-index: 2;
+  z-index: 80;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(3, 7, 17, .54);
+  backdrop-filter: blur(24px);
 }
-@keyframes tirePulse { 50% { filter: brightness(1.35); transform: scale(1.02); } }
-.center-tire img {
-  max-width: 94%;
-  max-height: 94%;
-  object-fit: contain;
-  filter: drop-shadow(0 36px 38px rgba(0, 0, 0, .58));
-  animation: floatTire 6s ease-in-out infinite;
-  z-index: 1;
+.brand { font-size: 28px; font-weight: 950; }
+.brand small {
+  display: block;
+  margin-top: -2px;
+  color: var(--cyan);
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
 }
-@keyframes floatTire { 50% { transform: translateY(-10px) rotate(-1.5deg); } }
-.orbit-node {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 148px;
-  min-height: 58px;
-  margin-left: -74px;
-  margin-top: -29px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: rgba(8, 20, 39, .72);
-  color: #eef8ff;
-  padding: 10px 11px;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, .34);
-  backdrop-filter: blur(18px);
-  font-weight: 950;
-  text-align: left;
-  transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a)));
-  transition: transform .35s ease, border-color .2s ease, background .2s ease;
+.search {
+  width: min(520px, 42vw);
+  margin-left: auto;
+  position: relative;
 }
-.orbit-node small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; font-weight: 850; }
-.orbit-node:hover, .orbit-node.active {
-  border-color: rgba(114, 210, 255, .72);
-  background: rgba(35, 105, 174, .64);
-  transform: rotate(var(--a)) translateX(calc(var(--r) + 8px)) rotate(calc(-1 * var(--a))) scale(1.04);
-}
-.orbit-node.season.active { background: rgba(255, 64, 56, .56); border-color: rgba(255, 140, 125, .72); }
-.product-hud {
-  position: absolute;
-  left: 28px;
-  right: 28px;
-  bottom: 24px;
-  display: grid;
-  grid-template-columns: 1.2fr .8fr auto;
-  gap: 12px;
-  align-items: stretch;
-}
-.hud-card {
-  min-height: 112px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(5, 13, 27, .74);
-  backdrop-filter: blur(18px);
-  padding: 16px;
-}
-.hud-card b { display: block; font-size: 20px; line-height: 1.15; }
-.hud-price { color: #ff7b72; font-size: 30px; font-weight: 950; margin-top: 8px; }
-.hud-meta { color: var(--muted); margin-top: 8px; font-weight: 850; }
-.ai-console {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  width: min(380px, calc(100% - 48px));
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(5, 13, 27, .66);
-  backdrop-filter: blur(18px);
-  padding: 16px;
-}
-.ai-console b { display: block; font-size: 18px; }
-.ai-console span { display: block; color: var(--muted); margin-top: 5px; line-height: 1.35; }
-.ai-input {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-  margin-top: 12px;
-}
-input, select {
+.search input {
   width: 100%;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  outline: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, .075);
+  padding: 0 48px 0 16px;
+}
+.search input:focus { border-color: rgba(91, 201, 255, .72); box-shadow: 0 0 0 4px rgba(71, 184, 255, .10); }
+.search button {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 10px;
+  color: #06101d;
+  background: var(--cyan);
+  font-weight: 950;
+}
+.stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d6eaff;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.stock::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #54f0b0;
+  box-shadow: 0 0 16px #54f0b0;
+}
+.stepper {
+  position: absolute;
+  z-index: 70;
+  top: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: rgba(255, 255, 255, .08);
-  color: #fff;
-  outline: 0;
-  padding: 12px;
-}
-.hybrid-layer {
-  padding: 54px 0 70px;
-}
-.doors {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-bottom: 22px;
-}
-.door, .panel {
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  background: rgba(7, 17, 34, .70);
+  background: rgba(5, 14, 28, .58);
   backdrop-filter: blur(22px);
-  box-shadow: 0 28px 90px rgba(0, 0, 0, .38);
 }
-.door { padding: 24px; min-height: 210px; }
-.door h2, .panel h2 { margin: 0 0 10px; font-size: 34px; }
-.mini-results {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 18px;
+.step {
+  min-width: 118px;
+  height: 40px;
+  border: 0;
+  border-radius: 11px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 900;
 }
-.mini-card, .catalog-card {
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, .075);
-  padding: 13px;
+.step span { opacity: .56; margin-right: 5px; }
+.step.active { color: #06101d; background: linear-gradient(135deg, #e9f8ff, #73d2ff); }
+.step.done { color: #d8edff; background: rgba(71, 184, 255, .10); }
+.orbital-field {
+  position: absolute;
+  inset: 76px 0 0;
   overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  outline: none;
+  perspective: 1300px;
 }
-.mini-photo, .catalog-photo {
-  height: 150px;
-  border-radius: 20px;
+.space-grid {
+  position: absolute;
+  left: 50%;
+  top: 53%;
+  width: min(92vw, 1320px);
+  height: min(50vw, 650px);
+  transform: translate(-50%, -50%) rotateX(64deg);
+  border-radius: 50%;
+  border: 1px solid rgba(111, 192, 255, .16);
+  box-shadow:
+    0 0 0 70px rgba(84, 172, 255, .025),
+    0 0 0 140px rgba(84, 172, 255, .018),
+    inset 0 0 80px rgba(71, 184, 255, .08);
+  pointer-events: none;
+}
+.space-grid::before,
+.space-grid::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px solid rgba(128, 201, 255, .18);
+  border-radius: 50%;
+}
+.space-grid::after { inset: 28%; border-color: rgba(255, 92, 81, .14); }
+.orbit-glow {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(55vw, 760px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(57, 174, 255, .19), rgba(57, 174, 255, .05) 35%, transparent 68%);
+  filter: blur(9px);
+  pointer-events: none;
+}
+.centerpiece {
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  top: 52%;
+  width: clamp(260px, 31vw, 480px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
-  background: radial-gradient(circle, rgba(53, 165, 255, .22), rgba(255, 255, 255, .04));
+  pointer-events: none;
 }
-.mini-photo img, .catalog-photo img {
-  max-width: 86%;
-  max-height: 86%;
+.centerpiece::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  border: 1px solid rgba(113, 211, 255, .40);
+  box-shadow: 0 0 80px rgba(44, 169, 255, .45), inset 0 0 70px rgba(44, 169, 255, .14);
+  animation: corePulse 3.2s ease-in-out infinite;
+}
+@keyframes corePulse { 50% { transform: scale(1.05); filter: brightness(1.35); } }
+.centerpiece img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 22px 25px rgba(0, 0, 0, .52));
+  filter: drop-shadow(0 35px 38px rgba(0, 0, 0, .58)) drop-shadow(0 0 20px rgba(98, 205, 255, .18));
+  animation: tireFloat 5.5s ease-in-out infinite;
 }
-.mini-title, .catalog-title { margin-top: 10px; min-height: 40px; font-weight: 950; line-height: 1.2; }
-.mini-price, .catalog-price { color: #ff7770; margin-top: 8px; font-size: 22px; font-weight: 950; }
-.panel { padding: 22px; }
-.filters {
-  display: grid;
-  grid-template-columns: 1.2fr 180px 160px 160px;
-  gap: 10px;
-  margin: 16px 0;
+@keyframes tireFloat {
+  0%, 100% { transform: translateY(3px) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
 }
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+.orbit-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
 }
-.catalog-actions { display: grid; grid-template-columns: 1fr 46px; gap: 8px; margin-top: 12px; }
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
+.orbit-option {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 168px;
+  min-height: 66px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgba(5, 13, 27, .92);
+  color: #f1f8ff;
+  background: rgba(5, 15, 31, .70);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .36);
+  backdrop-filter: blur(20px);
+  padding: 11px 13px;
+  text-align: left;
+  pointer-events: auto;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  will-change: transform, opacity;
+}
+.orbit-option b {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 15px;
+}
+.orbit-option small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-weight: 850;
+}
+.orbit-option:hover,
+.orbit-option:focus-visible {
+  border-color: rgba(108, 214, 255, .82);
+  background: rgba(24, 91, 143, .78);
+  box-shadow: 0 20px 70px rgba(23, 148, 232, .25);
+  outline: 0;
+}
+.orbit-option.active {
+  color: #07111e;
+  border-color: transparent;
+  background: linear-gradient(135deg, #f2fbff, #79d7ff);
+}
+.orbit-option.active small { color: #234c68; }
+.orbit-option.result.active {
   color: #fff;
-  padding: 12px 16px;
-  box-shadow: 0 18px 60px rgba(0, 0, 0, .38);
+  background: linear-gradient(135deg, #ff5149, #ff8243);
+  box-shadow: 0 20px 70px rgba(255, 81, 73, .30);
+}
+.orbit-option.result.active small { color: rgba(255,255,255,.78); }
+.ai-status {
+  position: absolute;
+  z-index: 55;
+  left: 30px;
+  top: 116px;
+  width: min(300px, calc(100vw - 60px));
+  color: #dceeff;
+}
+.ai-status .eyebrow {
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.ai-status h1 {
+  margin: 7px 0 5px;
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+.ai-status p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.guide {
+  position: absolute;
+  z-index: 50;
+  right: 30px;
+  top: 116px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+}
+.guide i {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--cyan);
+  font-style: normal;
+}
+.result-dock {
+  position: absolute;
+  z-index: 65;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  width: min(980px, calc(100vw - 40px));
+  min-height: 94px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) .75fr .75fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(4, 12, 25, .74);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .42);
+  backdrop-filter: blur(24px);
+}
+.dock-block { min-width: 0; padding: 3px 9px; }
+.dock-block + .dock-block { border-left: 1px solid rgba(151, 205, 255, .15); }
+.dock-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 17px;
+  font-weight: 950;
+}
+.dock-meta { margin-top: 5px; color: var(--muted); font-size: 11px; font-weight: 800; }
+.dock-value { color: #ff766f; font-size: 25px; font-weight: 950; }
+.dock-label { margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 850; text-transform: uppercase; }
+.dock-actions { display: flex; gap: 8px; }
+.action {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  padding: 0 15px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+.action.primary {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #ff5149, #ff8243);
+  box-shadow: 0 15px 38px rgba(255, 81, 73, .22);
+}
+.toast {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 130px;
+  transform: translate(-50%, 12px);
+  padding: 11px 15px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  color: #fff;
+  background: rgba(4, 12, 25, .92);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 90;
+  transition: .2s ease;
 }
-.toast.show { opacity: 1; }
-@media (max-width: 1180px) {
-  .hero { grid-template-columns: 1fr; }
-  .stage { min-height: 760px; }
-  .intro { max-width: 780px; }
-  .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 900px) {
+  .topbar { padding: 0 16px; }
+  .stock { display: none; }
+  .search { width: min(58vw, 440px); }
+  .step { min-width: 92px; }
+  .ai-status { top: 166px; left: 18px; }
+  .guide { top: 166px; right: 18px; }
+  .orbit-option { width: 142px; min-height: 60px; }
+  .result-dock { grid-template-columns: 1.3fr .7fr auto; }
+  .result-dock .set-block { display: none; }
 }
-@media (max-width: 760px) {
-  .shell { padding: 0 14px; }
-  .nav-links { display: none; }
-  .stage { min-height: 820px; border-radius: 26px; }
-  .orbit-system { inset: 70px 12px 180px; }
-  .orbit-node { width: 122px; margin-left: -61px; font-size: 13px; }
-  .product-hud { grid-template-columns: 1fr; left: 12px; right: 12px; bottom: 12px; }
-  .hud-card { min-height: auto; }
-  .doors, .mini-results, .catalog-grid { grid-template-columns: 1fr; }
-  .filters { grid-template-columns: 1fr; }
-  h1 { font-size: 48px; }
-  .center-tire { width: 280px; height: 280px; }
+@media (max-width: 620px) {
+  .app { min-height: 660px; }
+  .topbar { height: 66px; gap: 10px; }
+  .brand { font-size: 22px; }
+  .search { width: auto; flex: 1; }
+  .search input { height: 40px; font-size: 13px; padding-left: 12px; }
+  .search button { top: 5px; right: 5px; width: 30px; height: 30px; }
+  .stepper { top: 77px; width: calc(100vw - 20px); overflow-x: auto; justify-content: flex-start; }
+  .step { min-width: 86px; height: 36px; font-size: 11px; }
+  .orbital-field { inset: 66px 0 0; }
+  .ai-status { top: 132px; left: 14px; width: 230px; }
+  .ai-status h1 { font-size: 18px; }
+  .ai-status p { font-size: 11px; }
+  .guide { top: 140px; right: 12px; }
+  .guide span { display: none; }
+  .centerpiece { top: 52%; width: clamp(220px, 66vw, 310px); }
+  .space-grid { top: 53%; width: 130vw; height: 66vw; }
+  .orbit-glow { top: 52%; width: 95vw; }
+  .orbit-option { width: 116px; min-height: 54px; padding: 9px; border-radius: 14px; }
+  .orbit-option b { font-size: 12px; }
+  .orbit-option small { font-size: 9px; }
+  .result-dock {
+    bottom: 10px;
+    width: calc(100vw - 18px);
+    min-height: 84px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    border-radius: 18px;
+    padding: 9px;
+  }
+  .result-dock .price-block, .result-dock .set-block { display: none; }
+  .dock-title { font-size: 14px; }
+  .dock-meta { font-size: 10px; }
+  .dock-actions .action:not(.primary) { display: none; }
+  .action { min-height: 44px; padding: 0 12px; font-size: 12px; }
+  .toast { bottom: 108px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
 </style>
 </head>
 <body>
-<nav class="nav">
-  <div class="shell nav-inner">
-    <div class="brand">РАДО<small>3D orbit hybrid</small></div>
-    <div class="nav-links">
-      <a href="#orbit">Орбита</a>
-      <a href="#selection">Подбор</a>
-      <a href="#catalog">Каталог</a>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">РАДО<small>orbital tire system</small></div>
+    <label class="search">
+      <input id="aiSearch" placeholder="Напишите авто, размер или название" autocomplete="off">
+      <button id="searchBtn" aria-label="Найти">→</button>
+    </label>
+    <div class="stock">склад подключен · 825 позиций</div>
+  </header>
+
+  <nav class="stepper" aria-label="Этапы подбора">
+    <button class="step active" data-mode="size"><span>01</span>Размер</button>
+    <button class="step" data-mode="season"><span>02</span>Сезон</button>
+    <button class="step" data-mode="budget"><span>03</span>Цена</button>
+    <button class="step" data-mode="result"><span>04</span>Шины</button>
+  </nav>
+
+  <section class="orbital-field" id="orbitalField" tabindex="0" aria-label="Орбитальный подбор шин">
+    <div class="space-grid"></div>
+    <div class="orbit-glow"></div>
+    <div class="ai-status">
+      <div class="eyebrow">AI-подбор в реальном времени</div>
+      <h1 id="modeTitle">Выберите размер</h1>
+      <p id="aiText">Потяните орбиту и нажмите на подходящий размер.</p>
     </div>
-  </div>
-</nav>
-<main class="shell">
-  <section class="hero" id="orbit">
-    <div class="intro">
-      <span class="kicker">не каталог первым экраном</span>
-      <h1><span class="grad">Выбор крутится вокруг шины</span></h1>
-      <p>Размеры, сезон, бюджет и комплекты находятся на орбитах. Клиент кликает не по обычным карточкам, а по системе подбора вокруг центральной шины.</p>
-      <div class="status-grid">
-        <div class="status"><b id="statSize">195/65 R15</b><span>выбранный размер</span></div>
-        <div class="status"><b id="statCount">0</b><span>подходящих комплектов</span></div>
-        <div class="status"><b id="statPrice">0 ₽</b><span>лучшая цена за штуку</span></div>
-        <div class="status"><b id="statSet">0 ₽</b><span>комплект из 4</span></div>
-      </div>
-      <div class="cta-row">
-        <a class="btn primary" href="#selection">AI-подбор</a>
-        <a class="btn" href="#catalog">Полный каталог</a>
-      </div>
-    </div>
-    <div class="stage">
-      <div class="ai-console">
-        <b>AI-помощник по складу</b>
-        <span id="aiText">Выберите размер на внешней орбите. Я перестрою цену, сезон и комплекты вокруг шины.</span>
-        <div class="ai-input">
-          <input id="orbitSearch" placeholder="бренд, модель или размер">
-          <button class="btn blue" id="resetBtn">Сброс</button>
-        </div>
-      </div>
-      <div class="orbit-system" id="orbitSystem">
-        <div class="orbit-ring ring-a"></div>
-        <div class="orbit-ring ring-b"></div>
-        <div class="orbit-ring ring-c"></div>
-      </div>
-      <div class="center-tire">
-        <img id="mainImage" alt="">
-      </div>
-      <div class="product-hud">
-        <div class="hud-card">
-          <b id="mainTitle"></b>
-          <div class="hud-meta" id="mainMeta"></div>
-        </div>
-        <div class="hud-card">
-          <div class="hud-price" id="mainPrice"></div>
-          <div class="hud-meta" id="mainSet"></div>
-        </div>
-        <div class="hud-card">
-          <button class="btn primary" id="copyMain">Скопировать заявку</button>
-          <button class="btn" id="shareMain" style="margin-top:8px;width:100%">Поделиться</button>
-        </div>
-      </div>
+    <div class="guide"><i>↔</i><span>тяните или прокручивайте орбиту</span></div>
+    <div class="orbit-layer" id="orbitLayer"></div>
+    <div class="centerpiece">
+      <img src="public/rado-tire-cutout.png" alt="Автомобильная шина">
     </div>
   </section>
-  <section class="hybrid-layer" id="selection">
-    <div class="doors">
-      <article class="door">
-        <span class="kicker">дверь 1</span>
-        <h2>AI-подбор</h2>
-        <p>После клика по орбите здесь остаются три понятных варианта: дешевле, оптимально, дороже/бренд.</p>
-        <div class="mini-results" id="miniResults"></div>
-      </article>
-      <article class="door">
-        <span class="kicker">дверь 2</span>
-        <h2>Гибрид магазина</h2>
-        <p>Если клиент хочет смотреть сам, каталог ниже открывается как второй слой. Но первое впечатление остается 3D-подбором.</p>
-        <div class="cta-row">
-          <a class="btn blue" href="#orbit">Вернуться к орбите</a>
-          <a class="btn" href="#catalog">Открыть товары</a>
-        </div>
-      </article>
+
+  <aside class="result-dock" aria-live="polite">
+    <div class="dock-block">
+      <div class="dock-title" id="productTitle">Подбираем лучший комплект</div>
+      <div class="dock-meta" id="productMeta">выберите параметры на орбите</div>
     </div>
-  </section>
-  <section class="hybrid-layer" id="catalog">
-    <div class="panel">
-      <span class="kicker">второй слой</span>
-      <h2>Каталог только после подбора</h2>
-      <p>Это уже не главный экран, а режим для тех, кто хочет докрутить выбор вручную.</p>
-      <div class="filters">
-        <input id="catSearch" placeholder="поиск">
-        <select id="catSeason"><option value="">любой сезон</option><option>летняя</option><option>зимняя</option></select>
-        <input id="catMin" type="number" placeholder="цена от">
-        <input id="catMax" type="number" placeholder="цена до">
-      </div>
-      <div class="catalog-grid" id="catalogGrid"></div>
+    <div class="dock-block price-block">
+      <div class="dock-value" id="productPrice">—</div>
+      <div class="dock-label">за шину</div>
     </div>
-  </section>
+    <div class="dock-block set-block">
+      <div class="dock-value" id="productSet">—</div>
+      <div class="dock-label">комплект 4 шт.</div>
+    </div>
+    <div class="dock-actions">
+      <button class="action" id="shareBtn">Поделиться</button>
+      <button class="action primary" id="orderBtn">Забронировать</button>
+    </div>
+  </aside>
+  <div class="toast" id="toast">Заявка скопирована</div>
 </main>
-<div class="toast" id="toast">Заявка скопирована</div>
+
 <script>
-const ITEMS = [{"article": "3325030669", "title": "Fortune FSR-802 195/65 R15", "brand": "Fortune", "model": "FSR-802", "size": "195/65 R15", "season": "летняя", "price": 3393, "priceText": "3 393 ₽", "setText": "13 572 ₽", "rest": 38, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "YSTX5R1516", "title": "Tracmax X-Privilo TX5 195/65 R15", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "195/65 R15", "season": "летняя", "price": 3393, "priceText": "3 393 ₽", "setText": "13 572 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "202H2015", "title": "HiFly HF820 205/55 R16", "brand": "HiFly", "model": "HF820", "size": "205/55 R16", "season": "летняя", "price": 3498, "priceText": "3 498 ₽", "setText": "13 992 ₽", "rest": 10, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/HF820/big/0.png"}, {"article": "P100173", "title": "Bars SolarFlexx 205/55 R16", "brand": "Bars", "model": "SolarFlexx", "size": "205/55 R16", "season": "летняя", "price": 3598, "priceText": "3 598 ₽", "setText": "14 392 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Bars/SolarFlexx/big/0.png"}, {"article": "P200011", "title": "Attar S01 195/65 R15", "brand": "Attar", "model": "S01", "size": "195/65 R15", "season": "летняя", "price": 3633, "priceText": "3 633 ₽", "setText": "14 532 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "3150009", "title": "Viatti Brina V-521 185/65 R15", "brand": "Viatti", "model": "Brina V-521", "size": "185/65 R15", "season": "зимняя", "price": 3653, "priceText": "3 653 ₽", "setText": "14 612 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_V-521/big/0.jpg"}, {"article": "CTS283229", "title": "Triangle ReliaX Touring TE307 185/65 R15", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "185/65 R15", "season": "летняя", "price": 3683, "priceText": "3 683 ₽", "setText": "14 732 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/ReliaX_Touring_TE307/big/0.png"}, {"article": "P200014", "title": "Attar S01 205/55 R16", "brand": "Attar", "model": "S01", "size": "205/55 R16", "season": "летняя", "price": 3905, "priceText": "3 905 ₽", "setText": "15 620 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "PS20049", "title": "Attar W01 185/65 R15", "brand": "Attar", "model": "W01", "size": "185/65 R15", "season": "зимняя", "price": 3916, "priceText": "3 916 ₽", "setText": "15 664 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "1038297", "title": "Hankook Laufenn S Fit2 LK12 205/55 R16", "brand": "Hankook Laufenn", "model": "S Fit2 LK12", "size": "205/55 R16", "season": "летняя", "price": 3928, "priceText": "3 928 ₽", "setText": "15 712 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook_Laufenn/S_Fit2_LK12/big/0.png"}, {"article": "CTS283233", "title": "Triangle ReliaX Touring TE307 195/65 R15", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "195/65 R15", "season": "летняя", "price": 4024, "priceText": "4 024 ₽", "setText": "16 096 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/ReliaX_Touring_TE307/big/0.png"}, {"article": "3220007496", "title": "Sailun RoadX RXMotion H12 205/55 R16", "brand": "Sailun RoadX", "model": "RXMotion H12", "size": "205/55 R16", "season": "летняя", "price": 4066, "priceText": "4 066 ₽", "setText": "16 264 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_H12/big/0.png"}, {"article": "4405300", "title": "Pirelli Formula Energy 185/65 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "185/65 R15", "season": "летняя", "price": 4212, "priceText": "4 212 ₽", "setText": "16 848 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "3220007558", "title": "Sailun RoadX RXMotion U11 205/55 R16", "brand": "Sailun RoadX", "model": "RXMotion U11", "size": "205/55 R16", "season": "летняя", "price": 4288, "priceText": "4 288 ₽", "setText": "17 152 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_U11/big/0.png"}, {"article": "201H2056", "title": "HiFly HF-261 215/65 R16", "brand": "HiFly", "model": "HF-261", "size": "215/65 R16", "season": "летняя", "price": 4346, "priceText": "4 346 ₽", "setText": "17 384 ₽", "rest": 17, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/HF-261/big/0.png"}, {"article": "PS20051", "title": "Attar W01 195/65 R15", "brand": "Attar", "model": "W01", "size": "195/65 R15", "season": "зимняя", "price": 4381, "priceText": "4 381 ₽", "setText": "17 524 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "4365200", "title": "Pirelli Formula Energy 195/65 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "195/65 R15", "season": "летняя", "price": 4399, "priceText": "4 399 ₽", "setText": "17 596 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "CTS293474", "title": "Triangle EffeXSport TH202 205/55 R16", "brand": "Triangle", "model": "EffeXSport TH202", "size": "205/55 R16", "season": "летняя", "price": 4418, "priceText": "4 418 ₽", "setText": "17 672 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/EffeXSport_TH202/big/0.png"}, {"article": "1038371", "title": "Hankook Laufenn S Fit2 LK12 195/65 R15", "brand": "Hankook Laufenn", "model": "S Fit2 LK12", "size": "195/65 R15", "season": "летняя", "price": 4467, "priceText": "4 467 ₽", "setText": "17 868 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Hankook_Laufenn/S_Fit2_LK12/big/0.png"}, {"article": "4402800", "title": "Pirelli Formula Ice FR 185/65 R15", "brand": "Pirelli Formula", "model": "Ice FR", "size": "185/65 R15", "season": "зимняя", "price": 4633, "priceText": "4 633 ₽", "setText": "18 532 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "0348156", "title": "Gislaved Soft Frost 200 195/65 R15", "brand": "Gislaved", "model": "Soft Frost 200", "size": "195/65 R15", "season": "зимняя", "price": 4670, "priceText": "4 670 ₽", "setText": "18 680 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}, {"article": "4365300", "title": "Pirelli Formula Energy 205/55 R16", "brand": "Pirelli Formula", "model": "Energy", "size": "205/55 R16", "season": "летняя", "price": 4717, "priceText": "4 717 ₽", "setText": "18 868 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "16100120119", "title": "Cordiant Sno-Max 7000 185/65 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "185/65 R15", "season": "зимняя", "price": 4830, "priceText": "4 830 ₽", "setText": "19 320 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731455", "title": "Ikon Autograph Eco 3 185/65 R15", "brand": "Ikon", "model": "Autograph Eco 3", "size": "185/65 R15", "season": "летняя", "price": 4868, "priceText": "4 868 ₽", "setText": "19 472 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "03150050000", "title": "Gislaved PremiumControl 185/65 R15", "brand": "Gislaved", "model": "PremiumControl", "size": "185/65 R15", "season": "летняя", "price": 4890, "priceText": "4 890 ₽", "setText": "19 560 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/PremiumControl/big/03150050000.png"}, {"article": "4402500", "title": "Pirelli Formula Ice FR 195/65 R15", "brand": "Pirelli Formula", "model": "Ice FR", "size": "195/65 R15", "season": "зимняя", "price": 4903, "priceText": "4 903 ₽", "setText": "19 612 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "300H3002", "title": "HiFly Win-Turi 215 205/55 R16", "brand": "HiFly", "model": "Win-Turi 215", "size": "205/55 R16", "season": "зимняя", "price": 5050, "priceText": "5 050 ₽", "setText": "20 200 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "4375600", "title": "Pirelli Ice Zero FR 185/65 R15", "brand": "Pirelli", "model": "Ice Zero FR", "size": "185/65 R15", "season": "зимняя", "price": 5077, "priceText": "5 077 ₽", "setText": "20 308 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "T730589", "title": "Ikon Autograph Snow 3 185/65 R15", "brand": "Ikon", "model": "Autograph Snow 3", "size": "185/65 R15", "season": "зимняя", "price": 5114, "priceText": "5 114 ₽", "setText": "20 456 ₽", "rest": 34, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Snow_3/big/0.png"}, {"article": "R2447", "title": "Yokohama BluEarth-Es ES32 195/65 R15", "brand": "Yokohama", "model": "BluEarth-Es ES32", "size": "195/65 R15", "season": "летняя", "price": 5153, "priceText": "5 153 ₽", "setText": "20 612 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Yokohama/BluEarth-Es_ES32/big/0.png"}, {"article": "3150085", "title": "Viatti Bosco S/T V-526 215/65 R16", "brand": "Viatti", "model": "Bosco S/T V-526", "size": "215/65 R16", "season": "зимняя", "price": 5154, "priceText": "5 154 ₽", "setText": "20 616 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Bosco_S_T_V-526/big/0.jpg"}, {"article": "300H3010", "title": "HiFly Win-Turi 215 195/65 R15", "brand": "HiFly", "model": "Win-Turi 215", "size": "195/65 R15", "season": "зимняя", "price": 5170, "priceText": "5 170 ₽", "setText": "20 680 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "03150100000", "title": "Gislaved PremiumControl 195/65 R15", "brand": "Gislaved", "model": "PremiumControl", "size": "195/65 R15", "season": "летняя", "price": 5330, "priceText": "5 330 ₽", "setText": "21 320 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/PremiumControl/big/03150100000.png"}, {"article": "4365500", "title": "Pirelli Cinturato P1 195/65 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "195/65 R15", "season": "летняя", "price": 5342, "priceText": "5 342 ₽", "setText": "21 368 ₽", "rest": 34, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4365500.png"}, {"article": "3220010438", "title": "Sailun RoadX RXQuest H/T01 215/65 R16", "brand": "Sailun RoadX", "model": "RXQuest H/T01", "size": "215/65 R16", "season": "летняя", "price": 5366, "priceText": "5 366 ₽", "setText": "21 464 ₽", "rest": 32, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/3220010438.png?v=bluefix_20260722_141918"}, {"article": "4402700", "title": "Pirelli Formula Ice FR 205/55 R16", "brand": "Pirelli Formula", "model": "Ice FR", "size": "205/55 R16", "season": "зимняя", "price": 5420, "priceText": "5 420 ₽", "setText": "21 680 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "4375500", "title": "Pirelli Ice Zero FR 195/65 R15", "brand": "Pirelli", "model": "Ice Zero FR", "size": "195/65 R15", "season": "зимняя", "price": 5438, "priceText": "5 438 ₽", "setText": "21 752 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "0348025", "title": "Gislaved Nord Frost 200 195/65 R15", "brand": "Gislaved", "model": "Nord Frost 200", "size": "195/65 R15", "season": "зимняя", "price": 5470, "priceText": "5 470 ₽", "setText": "21 880 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "16111570148", "title": "Gislaved SpikeControl 185/65 R15", "brand": "Gislaved", "model": "SpikeControl", "size": "185/65 R15", "season": "зимняя", "price": 5500, "priceText": "5 500 ₽", "setText": "22 000 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "4370100", "title": "Pirelli Formula Ice 195/65 R15", "brand": "Pirelli Formula", "model": "Ice", "size": "195/65 R15", "season": "зимняя", "price": 5540, "priceText": "5 540 ₽", "setText": "22 160 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Formula/Formula_Ice/big/1.png"}, {"article": "3220010465", "title": "Sailun Atrezzo 4 Seasons 215/65 R16", "brand": "Sailun", "model": "Atrezzo 4 Seasons", "size": "215/65 R16", "season": "всесезонная", "price": 5628, "priceText": "5 628 ₽", "setText": "22 512 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun/Atrezzo_4_Seasons/big/0.png"}, {"article": "16100120129", "title": "Cordiant Sno-Max 7000 205/55 R16", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "205/55 R16", "season": "зимняя", "price": 5670, "priceText": "5 670 ₽", "setText": "22 680 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "16111570150", "title": "Gislaved SpikeControl 195/65 R15", "brand": "Gislaved", "model": "SpikeControl", "size": "195/65 R15", "season": "зимняя", "price": 5710, "priceText": "5 710 ₽", "setText": "22 840 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "16100120102", "title": "Cordiant Run Tour 215/65 R16", "brand": "Cordiant", "model": "Run Tour", "size": "215/65 R16", "season": "летняя", "price": 5760, "priceText": "5 760 ₽", "setText": "23 040 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "0348163", "title": "Gislaved Soft Frost 200 205/55 R16", "brand": "Gislaved", "model": "Soft Frost 200", "size": "205/55 R16", "season": "зимняя", "price": 5760, "priceText": "5 760 ₽", "setText": "23 040 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}, {"article": "PS20067", "title": "Attar W02 215/65 R16", "brand": "Attar", "model": "W02", "size": "215/65 R16", "season": "зимняя", "price": 5802, "priceText": "5 802 ₽", "setText": "23 208 ₽", "rest": 36, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W02/big/1.png"}, {"article": "16117030000", "title": "Gislaved IceControl 185/65 R15", "brand": "Gislaved", "model": "IceControl", "size": "185/65 R15", "season": "зимняя", "price": 5940, "priceText": "5 940 ₽", "setText": "23 760 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/IceControl/big/1.png"}, {"article": "0348051", "title": "Gislaved Nord Frost 200 205/55 R16", "brand": "Gislaved", "model": "Nord Frost 200", "size": "205/55 R16", "season": "зимняя", "price": 5990, "priceText": "5 990 ₽", "setText": "23 960 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "1026496", "title": "Hankook Kinergy 4s2 H750 195/65 R15", "brand": "Hankook", "model": "Kinergy 4s2 H750", "size": "195/65 R15", "season": "всесезонная", "price": 6094, "priceText": "6 094 ₽", "setText": "24 376 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_4s2_H750/big/0.png"}, {"article": "4379600", "title": "Pirelli Formula Energy 215/65 R16", "brand": "Pirelli Formula", "model": "Energy", "size": "215/65 R16", "season": "летняя", "price": 6543, "priceText": "6 543 ₽", "setText": "26 172 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "4514700", "title": "Pirelli Ice Zero 195/65 R15", "brand": "Pirelli", "model": "Ice Zero", "size": "195/65 R15", "season": "зимняя", "price": 6562, "priceText": "6 562 ₽", "setText": "26 248 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero/big/1.png"}, {"article": "1031745", "title": "Hankook Ventus Prime 4 K135A 215/65 R16", "brand": "Hankook", "model": "Ventus Prime 4 K135A", "size": "215/65 R16", "season": "летняя", "price": 6679, "priceText": "6 679 ₽", "setText": "26 716 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Ventus_Prime_4_K135A/big/0.png"}, {"article": "3849800", "title": "Pirelli Ice Zero 195/65 R15", "brand": "Pirelli", "model": "Ice Zero", "size": "195/65 R15", "season": "зимняя", "price": 6700, "priceText": "6 700 ₽", "setText": "26 800 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero/big/1.png"}, {"article": "16111570156", "title": "Gislaved SpikeControl 205/55 R16", "brand": "Gislaved", "model": "SpikeControl", "size": "205/55 R16", "season": "зимняя", "price": 6710, "priceText": "6 710 ₽", "setText": "26 840 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "16100120135", "title": "Cordiant Sno-Max 7000 215/65 R16", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "215/65 R16", "season": "зимняя", "price": 7010, "priceText": "7 010 ₽", "setText": "28 040 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "TS72573", "title": "Ikon Nordman 8 (Character Ice 8) 205/55 R16", "brand": "Ikon", "model": "Nordman 8 (Character Ice 8)", "size": "205/55 R16", "season": "зимняя", "price": 7196, "priceText": "7 196 ₽", "setText": "28 784 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_8/big/1.png"}, {"article": "4373100", "title": "Pirelli Ice Zero FR 215/65 R16", "brand": "Pirelli", "model": "Ice Zero FR", "size": "215/65 R16", "season": "зимняя", "price": 7877, "priceText": "7 877 ₽", "setText": "31 508 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "5800200", "title": "Pirelli Ice Zero FR 3 215/65 R16", "brand": "Pirelli", "model": "Ice Zero FR 3", "size": "215/65 R16", "season": "зимняя", "price": 9572, "priceText": "9 572 ₽", "setText": "38 288 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR_3/big/0.png"}, {"article": "4375800", "title": "Pirelli Ice Zero 2 215/65 R16", "brand": "Pirelli", "model": "Ice Zero 2", "size": "215/65 R16", "season": "зимняя", "price": 10605, "priceText": "10 605 ₽", "setText": "42 420 ₽", "rest": 31, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_2/big/1.png"}, {"article": "CTS293356", "title": "Goodride Ridemax G-118 175/65 R14", "brand": "Goodride", "model": "Ridemax G-118", "size": "175/65 R14", "season": "летняя", "price": 2721, "priceText": "2 721 ₽", "setText": "10 884 ₽", "rest": 4, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/CTS293356.png"}, {"article": "YSTX5R1409", "title": "Tracmax X-Privilo TX5 175/70 R14", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "175/70 R14", "season": "летняя", "price": 2817, "priceText": "2 817 ₽", "setText": "11 268 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "CTS293354", "title": "Goodride Ridemax G-118 175/70 R14", "brand": "Goodride", "model": "Ridemax G-118", "size": "175/70 R14", "season": "летняя", "price": 2911, "priceText": "2 911 ₽", "setText": "11 644 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "366617356", "title": "Cordiant Winter Drive PW-1 175/65 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "175/65 R14", "season": "зимняя", "price": 3070, "priceText": "3 070 ₽", "setText": "12 280 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "3415030669", "title": "Fortune FSR-802 185/60 R15", "brand": "Fortune", "model": "FSR-802", "size": "185/60 R15", "season": "летняя", "price": 3121, "priceText": "3 121 ₽", "setText": "12 484 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "YSTX5R1509", "title": "Tracmax X-Privilo TX5 185/60 R15", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "185/60 R15", "season": "летняя", "price": 3121, "priceText": "3 121 ₽", "setText": "12 484 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "CTS293352", "title": "Goodride Ridemax G-118 185/60 R15", "brand": "Goodride", "model": "Ridemax G-118", "size": "185/60 R15", "season": "летняя", "price": 3194, "priceText": "3 194 ₽", "setText": "12 776 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "461227050", "title": "Cordiant Winter Drive PW-1 175/70 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "175/70 R14", "season": "зимняя", "price": 3310, "priceText": "3 310 ₽", "setText": "13 240 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "16119470349", "title": "Tunga Nordway 3 175/70 R13", "brand": "Tunga", "model": "Nordway 3", "size": "175/70 R13", "season": "зимняя", "price": 3330, "priceText": "3 330 ₽", "setText": "13 320 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "CTS293347", "title": "Goodride Ridemax G-118 195/60 R15", "brand": "Goodride", "model": "Ridemax G-118", "size": "195/60 R15", "season": "летняя", "price": 3350, "priceText": "3 350 ₽", "setText": "13 400 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "3151001", "title": "Viatti Brina Nordico V-522 175/70 R13", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "175/70 R13", "season": "зимняя", "price": 3444, "priceText": "3 444 ₽", "setText": "13 776 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "457442784", "title": "Cordiant Road Runner PS-1 155/70 R13", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "155/70 R13", "season": "летняя", "price": 3510, "priceText": "3 510 ₽", "setText": "14 040 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "355815573", "title": "Cordiant Road Runner PS-1 175/70 R13", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "175/70 R13", "season": "летняя", "price": 3530, "priceText": "3 530 ₽", "setText": "14 120 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "3517030702", "title": "Fortune FSR-802 195/55 R16", "brand": "Fortune", "model": "FSR-802", "size": "195/55 R16", "season": "летняя", "price": 3550, "priceText": "3 550 ₽", "setText": "14 200 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "16119470351", "title": "Tunga Nordway 3 185/60 R14", "brand": "Tunga", "model": "Nordway 3", "size": "185/60 R14", "season": "зимняя", "price": 3550, "priceText": "3 550 ₽", "setText": "14 200 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "16100120093", "title": "Cordiant Run Tour 175/70 R13", "brand": "Cordiant", "model": "Run Tour", "size": "175/70 R13", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "16100040000", "title": "Cordiant Road Runner PS-1 185/60 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/60 R14", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "16100030000", "title": "Cordiant Road Runner PS-1 175/65 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "175/65 R14", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "366617376", "title": "Cordiant Winter Drive PW-1 185/60 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "185/60 R14", "season": "зимняя", "price": 3590, "priceText": "3 590 ₽", "setText": "14 360 ₽", "rest": 13, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "16100120094", "title": "Cordiant Run Tour 175/65 R14", "brand": "Cordiant", "model": "Run Tour", "size": "175/65 R14", "season": "летняя", "price": 3610, "priceText": "3 610 ₽", "setText": "14 440 ₽", "rest": 15, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "16119470381", "title": "Tunga Nordway 3 185/65 R14", "brand": "Tunga", "model": "Nordway 3", "size": "185/65 R14", "season": "зимняя", "price": 3630, "priceText": "3 630 ₽", "setText": "14 520 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "16119470353", "title": "Tunga Nordway 3 185/60 R15", "brand": "Tunga", "model": "Nordway 3", "size": "185/60 R15", "season": "зимняя", "price": 3660, "priceText": "3 660 ₽", "setText": "14 640 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "CTS293404", "title": "Goodride Ridemax G-118 195/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "195/55 R16", "season": "летняя", "price": 3664, "priceText": "3 664 ₽", "setText": "14 656 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "3151060", "title": "Viatti Nordico 2 V-528 185/60 R14", "brand": "Viatti", "model": "Nordico 2 V-528", "size": "185/60 R14", "season": "зимняя", "price": 3673, "priceText": "3 673 ₽", "setText": "14 692 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Nordico_2_V-528/big/1.png"}, {"article": "3151004", "title": "Viatti Brina Nordico V-522 185/60 R14", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "185/60 R14", "season": "зимняя", "price": 3673, "priceText": "3 673 ₽", "setText": "14 692 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "3426030702", "title": "Fortune FSR-802 205/60 R16", "brand": "Fortune", "model": "FSR-802", "size": "205/60 R16", "season": "летняя", "price": 3769, "priceText": "3 769 ₽", "setText": "15 076 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "355816321", "title": "Cordiant Road Runner PS-1 185/65 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/65 R14", "season": "летняя", "price": 3810, "priceText": "3 810 ₽", "setText": "15 240 ₽", "rest": 10, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "468326396", "title": "Cordiant Winter Drive PW-1 195/60 R15", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "195/60 R15", "season": "зимняя", "price": 3820, "priceText": "3 820 ₽", "setText": "15 280 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "CTS293368", "title": "Goodride Ridemax G-118 205/60 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "205/60 R16", "season": "летняя", "price": 3865, "priceText": "3 865 ₽", "setText": "15 460 ₽", "rest": 19, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "1024677", "title": "Hankook Kinergy Eco 2 K435 185/60 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/60 R14", "season": "летняя", "price": 3899, "priceText": "3 899 ₽", "setText": "15 596 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "YSTX3R1605", "title": "Tracmax X-Privilo TX3 215/45 R16", "brand": "Tracmax", "model": "X-Privilo TX3", "size": "215/45 R16", "season": "летняя", "price": 3978, "priceText": "3 978 ₽", "setText": "15 912 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX3/big/0.png"}, {"article": "4362000", "title": "Pirelli Formula Energy 175/65 R14", "brand": "Pirelli Formula", "model": "Energy", "size": "175/65 R14", "season": "летняя", "price": 3978, "priceText": "3 978 ₽", "setText": "15 912 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "553505421", "title": "Cordiant Snow Cross PW-2 175/70 R13", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "175/70 R13", "season": "зимняя", "price": 4070, "priceText": "4 070 ₽", "setText": "16 280 ₽", "rest": 21, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "PS20057", "title": "Attar W01 185/60 R15", "brand": "Attar", "model": "W01", "size": "185/60 R15", "season": "зимняя", "price": 4168, "priceText": "4 168 ₽", "setText": "16 672 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "CTS293371", "title": "Goodride Ridemax G-118 215/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "215/55 R16", "season": "летняя", "price": 4179, "priceText": "4 179 ₽", "setText": "16 716 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "16100120096", "title": "Cordiant Run Tour 185/60 R15", "brand": "Cordiant", "model": "Run Tour", "size": "185/60 R15", "season": "летняя", "price": 4180, "priceText": "4 180 ₽", "setText": "16 720 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "T743174", "title": "Ikon Character Eco (Nordman SX3) 195/50 R15", "brand": "Ikon", "model": "Character Eco (Nordman SX3)", "size": "195/50 R15", "season": "летняя", "price": 4228, "priceText": "4 228 ₽", "setText": "16 912 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Eco/big/0.png"}, {"article": "366617396", "title": "Cordiant Winter Drive PW-1 205/60 R16", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "205/60 R16", "season": "зимняя", "price": 4240, "priceText": "4 240 ₽", "setText": "16 960 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "355816334", "title": "Cordiant Road Runner PS-1 185/70 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/70 R14", "season": "летняя", "price": 4250, "priceText": "4 250 ₽", "setText": "17 000 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "AAB2029", "title": "Antares Grip 60 ice 185/60 R15", "brand": "Antares", "model": "Grip 60 ice", "size": "185/60 R15", "season": "зимняя", "price": 4290, "priceText": "4 290 ₽", "setText": "17 160 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Antares/Grip_60_ice/big/1.png"}, {"article": "16100120302", "title": "Gislaved EcoControl 175/65 R14", "brand": "Gislaved", "model": "EcoControl", "size": "175/65 R14", "season": "летняя", "price": 4330, "priceText": "4 330 ₽", "setText": "17 320 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/EcoControl/big/0.png"}, {"article": "16100120105", "title": "Cordiant Sno-Max 7000 175/70 R13", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/70 R13", "season": "зимняя", "price": 4360, "priceText": "4 360 ₽", "setText": "17 440 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731442", "title": "Ikon Autograph Eco 3 175/70 R13", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/70 R13", "season": "летняя", "price": 4427, "priceText": "4 427 ₽", "setText": "17 708 ₽", "rest": 19, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "TS71900", "title": "Ikon Nordman 5 155/70 R13", "brand": "Ikon", "model": "Nordman 5", "size": "155/70 R13", "season": "зимняя", "price": 4428, "priceText": "4 428 ₽", "setText": "17 712 ₽", "rest": 17, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_5/big/1.png"}, {"article": "553507030", "title": "Cordiant Snow Cross PW-2 185/65 R14", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "185/65 R14", "season": "зимняя", "price": 4440, "priceText": "4 440 ₽", "setText": "17 760 ₽", "rest": 22, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "1022741", "title": "Hankook Kinergy Eco 2 K435 185/70 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/70 R14", "season": "летняя", "price": 4466, "priceText": "4 466 ₽", "setText": "17 864 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "P200015", "title": "Attar S01 205/60 R16", "brand": "Attar", "model": "S01", "size": "205/60 R16", "season": "летняя", "price": 4471, "priceText": "4 471 ₽", "setText": "17 884 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "4364400", "title": "Pirelli Formula Energy 185/55 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "185/55 R15", "season": "летняя", "price": 4477, "priceText": "4 477 ₽", "setText": "17 908 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "CTS293473", "title": "Triangle ReliaX Touring TE307 205/60 R16", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "205/60 R16", "season": "летняя", "price": 4509, "priceText": "4 509 ₽", "setText": "18 036 ₽", "rest": 8, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos_blue_restore/20260722_021105/CTS293473.png"}, {"article": "468326173", "title": "Cordiant Winter Drive PW-1 195/55 R15", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "195/55 R15", "season": "зимняя", "price": 4520, "priceText": "4 520 ₽", "setText": "18 080 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "1024676", "title": "Hankook Kinergy Eco 2 K435 185/65 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/65 R14", "season": "летняя", "price": 4543, "priceText": "4 543 ₽", "setText": "18 172 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "1022710", "title": "Hankook Kinergy Eco 2 K435 175/70 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "175/70 R14", "season": "летняя", "price": 4543, "priceText": "4 543 ₽", "setText": "18 172 ₽", "rest": 36, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "221008318", "title": "LingLong Leao Winter Defender Ice I-15 215/60 R16", "brand": "LingLong Leao", "model": "Winter Defender Ice I-15", "size": "215/60 R16", "season": "зимняя", "price": 4555, "priceText": "4 555 ₽", "setText": "18 220 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/LingLong_Leao/Winter_Defender_Ice_I-15/big/0.png"}, {"article": "4364000", "title": "Pirelli Formula Energy 195/60 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "195/60 R15", "season": "летняя", "price": 4567, "priceText": "4 567 ₽", "setText": "18 268 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "16100120107", "title": "Cordiant Sno-Max 7000 175/65 R14", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/65 R14", "season": "зимняя", "price": 4570, "priceText": "4 570 ₽", "setText": "18 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731445", "title": "Ikon Autograph Eco 3 175/65 R14", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/65 R14", "season": "летняя", "price": 4626, "priceText": "4 626 ₽", "setText": "18 504 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "4373600", "title": "Pirelli Ice Zero FR 175/65 R14", "brand": "Pirelli", "model": "Ice Zero FR", "size": "175/65 R14", "season": "зимняя", "price": 4657, "priceText": "4 657 ₽", "setText": "18 628 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "CTS293372", "title": "Goodride Ridemax G-118 225/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "225/55 R16", "season": "летняя", "price": 4660, "priceText": "4 660 ₽", "setText": "18 640 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "TS77953", "title": "Ikon Character Ice 7 (Nordman 7) 155/80 R13", "brand": "Ikon", "model": "Character Ice 7 (Nordman 7)", "size": "155/80 R13", "season": "зимняя", "price": 4677, "priceText": "4 677 ₽", "setText": "18 708 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Ice_7/big/1.png"}, {"article": "1305231957", "title": "Cordiant Snow Cross PW-2 185/70 R14", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "185/70 R14", "season": "зимняя", "price": 4700, "priceText": "4 700 ₽", "setText": "18 800 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "16100120109", "title": "Cordiant Sno-Max 7000 175/70 R14", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/70 R14", "season": "зимняя", "price": 4710, "priceText": "4 710 ₽", "setText": "18 840 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "16100120117", "title": "Cordiant Sno-Max 7000 185/60 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "185/60 R15", "season": "зимняя", "price": 4730, "priceText": "4 730 ₽", "setText": "18 920 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "4362200", "title": "Pirelli Cinturato P1 175/65 R14", "brand": "Pirelli", "model": "Cinturato P1", "size": "175/65 R14", "season": "летняя", "price": 4795, "priceText": "4 795 ₽", "setText": "19 180 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4362200.png"}, {"article": "3151011", "title": "Viatti Brina Nordico V-522 195/55 R15", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "195/55 R15", "season": "зимняя", "price": 4804, "priceText": "4 804 ₽", "setText": "19 216 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "300H3003", "title": "HiFly Win-Turi 215 195/60 R15", "brand": "HiFly", "model": "Win-Turi 215", "size": "195/60 R15", "season": "зимняя", "price": 4815, "priceText": "4 815 ₽", "setText": "19 260 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "3220007344", "title": "Sailun RoadX RXMotion 4S 205/45 R16", "brand": "Sailun RoadX", "model": "RXMotion 4S", "size": "205/45 R16", "season": "всесезонная", "price": 4820, "priceText": "4 820 ₽", "setText": "19 280 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_4S/big/0.png"}, {"article": "T730587", "title": "Ikon Autograph Snow 3 175/65 R14", "brand": "Ikon", "model": "Autograph Snow 3", "size": "175/65 R14", "season": "зимняя", "price": 4820, "priceText": "4 820 ₽", "setText": "19 280 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Snow_3/big/0.png"}, {"article": "T731448", "title": "Ikon Autograph Eco 3 175/70 R14", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/70 R14", "season": "летняя", "price": 4825, "priceText": "4 825 ₽", "setText": "19 300 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "4370000", "title": "Pirelli Formula Ice 175/65 R14", "brand": "Pirelli Formula", "model": "Ice", "size": "175/65 R14", "season": "зимняя", "price": 4867, "priceText": "4 867 ₽", "setText": "19 468 ₽", "rest": 24, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/4370000.png"}, {"article": "16100120304", "title": "Gislaved EcoControl 185/60 R15", "brand": "Gislaved", "model": "EcoControl", "size": "185/60 R15", "season": "летняя", "price": 4870, "priceText": "4 870 ₽", "setText": "19 480 ₽", "rest": 12, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/16100120304.png"}, {"article": "4364600", "title": "Pirelli Cinturato P1 195/50 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "195/50 R15", "season": "летняя", "price": 4873, "priceText": "4 873 ₽", "setText": "19 492 ₽", "rest": 9, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4364600.png"}, {"article": "P200013", "title": "Attar S01 195/55 R16", "brand": "Attar", "model": "S01", "size": "195/55 R16", "season": "летняя", "price": 4873, "priceText": "4 873 ₽", "setText": "19 492 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "TS72290", "title": "Ikon Nordman 7 175/65 R15", "brand": "Ikon", "model": "Nordman 7", "size": "175/65 R15", "season": "зимняя", "price": 4879, "priceText": "4 879 ₽", "setText": "19 516 ₽", "rest": 15, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_7/big/1.png"}, {"article": "R2430", "title": "Yokohama BluEarth-Es ES32 185/65 R14", "brand": "Yokohama", "model": "BluEarth-Es ES32", "size": "185/65 R14", "season": "летняя", "price": 4879, "priceText": "4 879 ₽", "setText": "19 516 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Yokohama/BluEarth-Es_ES32/big/0.png"}, {"article": "16100120121", "title": "Cordiant Sno-Max 7000 195/60 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "195/60 R15", "season": "зимняя", "price": 4890, "priceText": "4 890 ₽", "setText": "19 560 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "0348031", "title": "Gislaved Nord Frost 200 185/60 R14", "brand": "Gislaved", "model": "Nord Frost 200", "size": "185/60 R14", "season": "зимняя", "price": 4900, "priceText": "4 900 ₽", "setText": "19 600 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "0348011", "title": "Gislaved Nord Frost 200 175/70 R14", "brand": "Gislaved", "model": "Nord Frost 200", "size": "175/70 R14", "season": "зимняя", "price": 4910, "priceText": "4 910 ₽", "setText": "19 640 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "CTS293410", "title": "Goodride ZuperEco Z-107 215/60 R17", "brand": "Goodride", "model": "ZuperEco Z-107", "size": "215/60 R17", "season": "летняя", "price": 4911, "priceText": "4 911 ₽", "setText": "19 644 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/ZuperEco_Z-107/big/0.png"}, {"article": "221002007", "title": "LingLong Leao Nova-Force 235/45 R17", "brand": "LingLong Leao", "model": "Nova-Force", "size": "235/45 R17", "season": "летняя", "price": 4961, "priceText": "4 961 ₽", "setText": "19 844 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/LingLong_Leao/Nova-Force/big/0.png"}, {"article": "AAB3076", "title": "Antares Grip 60 ice 205/60 R16", "brand": "Antares", "model": "Grip 60 ice", "size": "205/60 R16", "season": "зимняя", "price": 4990, "priceText": "4 990 ₽", "setText": "19 960 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Antares/Grip_60_ice/big/1.png"}, {"article": "T742963", "title": "Ikon Character Snow 2 (Nordman RS2) 175/65 R15", "brand": "Ikon", "model": "Character Snow 2 (Nordman RS2)", "size": "175/65 R15", "season": "зимняя", "price": 5019, "priceText": "5 019 ₽", "setText": "20 076 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Snow_2/big/0.png"}];
+const ITEMS = [{"article": "3325030669", "title": "Fortune FSR-802 195/65 R15", "brand": "Fortune", "model": "FSR-802", "size": "195/65 R15", "season": "летняя", "price": 3393, "priceText": "3 393 ₽", "setText": "13 572 ₽", "rest": 38, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "YSTX5R1516", "title": "Tracmax X-Privilo TX5 195/65 R15", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "195/65 R15", "season": "летняя", "price": 3393, "priceText": "3 393 ₽", "setText": "13 572 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "202H2015", "title": "HiFly HF820 205/55 R16", "brand": "HiFly", "model": "HF820", "size": "205/55 R16", "season": "летняя", "price": 3498, "priceText": "3 498 ₽", "setText": "13 992 ₽", "rest": 10, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/HF820/big/0.png"}, {"article": "P100173", "title": "Bars SolarFlexx 205/55 R16", "brand": "Bars", "model": "SolarFlexx", "size": "205/55 R16", "season": "летняя", "price": 3598, "priceText": "3 598 ₽", "setText": "14 392 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Bars/SolarFlexx/big/0.png"}, {"article": "P200011", "title": "Attar S01 195/65 R15", "brand": "Attar", "model": "S01", "size": "195/65 R15", "season": "летняя", "price": 3633, "priceText": "3 633 ₽", "setText": "14 532 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "3150009", "title": "Viatti Brina V-521 185/65 R15", "brand": "Viatti", "model": "Brina V-521", "size": "185/65 R15", "season": "зимняя", "price": 3653, "priceText": "3 653 ₽", "setText": "14 612 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_V-521/big/0.jpg"}, {"article": "CTS283229", "title": "Triangle ReliaX Touring TE307 185/65 R15", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "185/65 R15", "season": "летняя", "price": 3683, "priceText": "3 683 ₽", "setText": "14 732 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/ReliaX_Touring_TE307/big/0.png"}, {"article": "P200014", "title": "Attar S01 205/55 R16", "brand": "Attar", "model": "S01", "size": "205/55 R16", "season": "летняя", "price": 3905, "priceText": "3 905 ₽", "setText": "15 620 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "PS20049", "title": "Attar W01 185/65 R15", "brand": "Attar", "model": "W01", "size": "185/65 R15", "season": "зимняя", "price": 3916, "priceText": "3 916 ₽", "setText": "15 664 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "1038297", "title": "Hankook Laufenn S Fit2 LK12 205/55 R16", "brand": "Hankook Laufenn", "model": "S Fit2 LK12", "size": "205/55 R16", "season": "летняя", "price": 3928, "priceText": "3 928 ₽", "setText": "15 712 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook_Laufenn/S_Fit2_LK12/big/0.png"}, {"article": "CTS283233", "title": "Triangle ReliaX Touring TE307 195/65 R15", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "195/65 R15", "season": "летняя", "price": 4024, "priceText": "4 024 ₽", "setText": "16 096 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/ReliaX_Touring_TE307/big/0.png"}, {"article": "3220007496", "title": "Sailun RoadX RXMotion H12 205/55 R16", "brand": "Sailun RoadX", "model": "RXMotion H12", "size": "205/55 R16", "season": "летняя", "price": 4066, "priceText": "4 066 ₽", "setText": "16 264 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_H12/big/0.png"}, {"article": "4405300", "title": "Pirelli Formula Energy 185/65 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "185/65 R15", "season": "летняя", "price": 4212, "priceText": "4 212 ₽", "setText": "16 848 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "3220007558", "title": "Sailun RoadX RXMotion U11 205/55 R16", "brand": "Sailun RoadX", "model": "RXMotion U11", "size": "205/55 R16", "season": "летняя", "price": 4288, "priceText": "4 288 ₽", "setText": "17 152 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_U11/big/0.png"}, {"article": "201H2056", "title": "HiFly HF-261 215/65 R16", "brand": "HiFly", "model": "HF-261", "size": "215/65 R16", "season": "летняя", "price": 4346, "priceText": "4 346 ₽", "setText": "17 384 ₽", "rest": 17, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/HF-261/big/0.png"}, {"article": "PS20051", "title": "Attar W01 195/65 R15", "brand": "Attar", "model": "W01", "size": "195/65 R15", "season": "зимняя", "price": 4381, "priceText": "4 381 ₽", "setText": "17 524 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "4365200", "title": "Pirelli Formula Energy 195/65 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "195/65 R15", "season": "летняя", "price": 4399, "priceText": "4 399 ₽", "setText": "17 596 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "CTS293474", "title": "Triangle EffeXSport TH202 205/55 R16", "brand": "Triangle", "model": "EffeXSport TH202", "size": "205/55 R16", "season": "летняя", "price": 4418, "priceText": "4 418 ₽", "setText": "17 672 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Triangle/EffeXSport_TH202/big/0.png"}, {"article": "1038371", "title": "Hankook Laufenn S Fit2 LK12 195/65 R15", "brand": "Hankook Laufenn", "model": "S Fit2 LK12", "size": "195/65 R15", "season": "летняя", "price": 4467, "priceText": "4 467 ₽", "setText": "17 868 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Hankook_Laufenn/S_Fit2_LK12/big/0.png"}, {"article": "4402800", "title": "Pirelli Formula Ice FR 185/65 R15", "brand": "Pirelli Formula", "model": "Ice FR", "size": "185/65 R15", "season": "зимняя", "price": 4633, "priceText": "4 633 ₽", "setText": "18 532 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "0348156", "title": "Gislaved Soft Frost 200 195/65 R15", "brand": "Gislaved", "model": "Soft Frost 200", "size": "195/65 R15", "season": "зимняя", "price": 4670, "priceText": "4 670 ₽", "setText": "18 680 ₽", "rest": 40, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}, {"article": "4365300", "title": "Pirelli Formula Energy 205/55 R16", "brand": "Pirelli Formula", "model": "Energy", "size": "205/55 R16", "season": "летняя", "price": 4717, "priceText": "4 717 ₽", "setText": "18 868 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "16100120119", "title": "Cordiant Sno-Max 7000 185/65 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "185/65 R15", "season": "зимняя", "price": 4830, "priceText": "4 830 ₽", "setText": "19 320 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731455", "title": "Ikon Autograph Eco 3 185/65 R15", "brand": "Ikon", "model": "Autograph Eco 3", "size": "185/65 R15", "season": "летняя", "price": 4868, "priceText": "4 868 ₽", "setText": "19 472 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "03150050000", "title": "Gislaved PremiumControl 185/65 R15", "brand": "Gislaved", "model": "PremiumControl", "size": "185/65 R15", "season": "летняя", "price": 4890, "priceText": "4 890 ₽", "setText": "19 560 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/PremiumControl/big/03150050000.png"}, {"article": "4402500", "title": "Pirelli Formula Ice FR 195/65 R15", "brand": "Pirelli Formula", "model": "Ice FR", "size": "195/65 R15", "season": "зимняя", "price": 4903, "priceText": "4 903 ₽", "setText": "19 612 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "300H3002", "title": "HiFly Win-Turi 215 205/55 R16", "brand": "HiFly", "model": "Win-Turi 215", "size": "205/55 R16", "season": "зимняя", "price": 5050, "priceText": "5 050 ₽", "setText": "20 200 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "4375600", "title": "Pirelli Ice Zero FR 185/65 R15", "brand": "Pirelli", "model": "Ice Zero FR", "size": "185/65 R15", "season": "зимняя", "price": 5077, "priceText": "5 077 ₽", "setText": "20 308 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "T730589", "title": "Ikon Autograph Snow 3 185/65 R15", "brand": "Ikon", "model": "Autograph Snow 3", "size": "185/65 R15", "season": "зимняя", "price": 5114, "priceText": "5 114 ₽", "setText": "20 456 ₽", "rest": 34, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Snow_3/big/0.png"}, {"article": "R2447", "title": "Yokohama BluEarth-Es ES32 195/65 R15", "brand": "Yokohama", "model": "BluEarth-Es ES32", "size": "195/65 R15", "season": "летняя", "price": 5153, "priceText": "5 153 ₽", "setText": "20 612 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Yokohama/BluEarth-Es_ES32/big/0.png"}, {"article": "3150085", "title": "Viatti Bosco S/T V-526 215/65 R16", "brand": "Viatti", "model": "Bosco S/T V-526", "size": "215/65 R16", "season": "зимняя", "price": 5154, "priceText": "5 154 ₽", "setText": "20 616 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Bosco_S_T_V-526/big/0.jpg"}, {"article": "300H3010", "title": "HiFly Win-Turi 215 195/65 R15", "brand": "HiFly", "model": "Win-Turi 215", "size": "195/65 R15", "season": "зимняя", "price": 5170, "priceText": "5 170 ₽", "setText": "20 680 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "03150100000", "title": "Gislaved PremiumControl 195/65 R15", "brand": "Gislaved", "model": "PremiumControl", "size": "195/65 R15", "season": "летняя", "price": 5330, "priceText": "5 330 ₽", "setText": "21 320 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/PremiumControl/big/03150100000.png"}, {"article": "4365500", "title": "Pirelli Cinturato P1 195/65 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "195/65 R15", "season": "летняя", "price": 5342, "priceText": "5 342 ₽", "setText": "21 368 ₽", "rest": 34, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4365500.png"}, {"article": "3220010438", "title": "Sailun RoadX RXQuest H/T01 215/65 R16", "brand": "Sailun RoadX", "model": "RXQuest H/T01", "size": "215/65 R16", "season": "летняя", "price": 5366, "priceText": "5 366 ₽", "setText": "21 464 ₽", "rest": 32, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/3220010438.png?v=bluefix_20260722_141918"}, {"article": "4402700", "title": "Pirelli Formula Ice FR 205/55 R16", "brand": "Pirelli Formula", "model": "Ice FR", "size": "205/55 R16", "season": "зимняя", "price": 5420, "priceText": "5 420 ₽", "setText": "21 680 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "4375500", "title": "Pirelli Ice Zero FR 195/65 R15", "brand": "Pirelli", "model": "Ice Zero FR", "size": "195/65 R15", "season": "зимняя", "price": 5438, "priceText": "5 438 ₽", "setText": "21 752 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "0348025", "title": "Gislaved Nord Frost 200 195/65 R15", "brand": "Gislaved", "model": "Nord Frost 200", "size": "195/65 R15", "season": "зимняя", "price": 5470, "priceText": "5 470 ₽", "setText": "21 880 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "16111570148", "title": "Gislaved SpikeControl 185/65 R15", "brand": "Gislaved", "model": "SpikeControl", "size": "185/65 R15", "season": "зимняя", "price": 5500, "priceText": "5 500 ₽", "setText": "22 000 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "4370100", "title": "Pirelli Formula Ice 195/65 R15", "brand": "Pirelli Formula", "model": "Ice", "size": "195/65 R15", "season": "зимняя", "price": 5540, "priceText": "5 540 ₽", "setText": "22 160 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Formula/Formula_Ice/big/1.png"}, {"article": "3220010465", "title": "Sailun Atrezzo 4 Seasons 215/65 R16", "brand": "Sailun", "model": "Atrezzo 4 Seasons", "size": "215/65 R16", "season": "всесезонная", "price": 5628, "priceText": "5 628 ₽", "setText": "22 512 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Sailun/Atrezzo_4_Seasons/big/0.png"}, {"article": "16100120129", "title": "Cordiant Sno-Max 7000 205/55 R16", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "205/55 R16", "season": "зимняя", "price": 5670, "priceText": "5 670 ₽", "setText": "22 680 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "16111570150", "title": "Gislaved SpikeControl 195/65 R15", "brand": "Gislaved", "model": "SpikeControl", "size": "195/65 R15", "season": "зимняя", "price": 5710, "priceText": "5 710 ₽", "setText": "22 840 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "16100120102", "title": "Cordiant Run Tour 215/65 R16", "brand": "Cordiant", "model": "Run Tour", "size": "215/65 R16", "season": "летняя", "price": 5760, "priceText": "5 760 ₽", "setText": "23 040 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "0348163", "title": "Gislaved Soft Frost 200 205/55 R16", "brand": "Gislaved", "model": "Soft Frost 200", "size": "205/55 R16", "season": "зимняя", "price": 5760, "priceText": "5 760 ₽", "setText": "23 040 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}, {"article": "PS20067", "title": "Attar W02 215/65 R16", "brand": "Attar", "model": "W02", "size": "215/65 R16", "season": "зимняя", "price": 5802, "priceText": "5 802 ₽", "setText": "23 208 ₽", "rest": 36, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W02/big/1.png"}, {"article": "16117030000", "title": "Gislaved IceControl 185/65 R15", "brand": "Gislaved", "model": "IceControl", "size": "185/65 R15", "season": "зимняя", "price": 5940, "priceText": "5 940 ₽", "setText": "23 760 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/IceControl/big/1.png"}, {"article": "0348051", "title": "Gislaved Nord Frost 200 205/55 R16", "brand": "Gislaved", "model": "Nord Frost 200", "size": "205/55 R16", "season": "зимняя", "price": 5990, "priceText": "5 990 ₽", "setText": "23 960 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "1026496", "title": "Hankook Kinergy 4s2 H750 195/65 R15", "brand": "Hankook", "model": "Kinergy 4s2 H750", "size": "195/65 R15", "season": "всесезонная", "price": 6094, "priceText": "6 094 ₽", "setText": "24 376 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_4s2_H750/big/0.png"}, {"article": "4379600", "title": "Pirelli Formula Energy 215/65 R16", "brand": "Pirelli Formula", "model": "Energy", "size": "215/65 R16", "season": "летняя", "price": 6543, "priceText": "6 543 ₽", "setText": "26 172 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "4514700", "title": "Pirelli Ice Zero 195/65 R15", "brand": "Pirelli", "model": "Ice Zero", "size": "195/65 R15", "season": "зимняя", "price": 6562, "priceText": "6 562 ₽", "setText": "26 248 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero/big/1.png"}, {"article": "1031745", "title": "Hankook Ventus Prime 4 K135A 215/65 R16", "brand": "Hankook", "model": "Ventus Prime 4 K135A", "size": "215/65 R16", "season": "летняя", "price": 6679, "priceText": "6 679 ₽", "setText": "26 716 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Ventus_Prime_4_K135A/big/0.png"}, {"article": "3849800", "title": "Pirelli Ice Zero 195/65 R15", "brand": "Pirelli", "model": "Ice Zero", "size": "195/65 R15", "season": "зимняя", "price": 6700, "priceText": "6 700 ₽", "setText": "26 800 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero/big/1.png"}, {"article": "16111570156", "title": "Gislaved SpikeControl 205/55 R16", "brand": "Gislaved", "model": "SpikeControl", "size": "205/55 R16", "season": "зимняя", "price": 6710, "priceText": "6 710 ₽", "setText": "26 840 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "16100120135", "title": "Cordiant Sno-Max 7000 215/65 R16", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "215/65 R16", "season": "зимняя", "price": 7010, "priceText": "7 010 ₽", "setText": "28 040 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "TS72573", "title": "Ikon Nordman 8 (Character Ice 8) 205/55 R16", "brand": "Ikon", "model": "Nordman 8 (Character Ice 8)", "size": "205/55 R16", "season": "зимняя", "price": 7196, "priceText": "7 196 ₽", "setText": "28 784 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_8/big/1.png"}, {"article": "4373100", "title": "Pirelli Ice Zero FR 215/65 R16", "brand": "Pirelli", "model": "Ice Zero FR", "size": "215/65 R16", "season": "зимняя", "price": 7877, "priceText": "7 877 ₽", "setText": "31 508 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "5800200", "title": "Pirelli Ice Zero FR 3 215/65 R16", "brand": "Pirelli", "model": "Ice Zero FR 3", "size": "215/65 R16", "season": "зимняя", "price": 9572, "priceText": "9 572 ₽", "setText": "38 288 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR_3/big/0.png"}, {"article": "4375800", "title": "Pirelli Ice Zero 2 215/65 R16", "brand": "Pirelli", "model": "Ice Zero 2", "size": "215/65 R16", "season": "зимняя", "price": 10605, "priceText": "10 605 ₽", "setText": "42 420 ₽", "rest": 31, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_2/big/1.png"}, {"article": "CTS293356", "title": "Goodride Ridemax G-118 175/65 R14", "brand": "Goodride", "model": "Ridemax G-118", "size": "175/65 R14", "season": "летняя", "price": 2721, "priceText": "2 721 ₽", "setText": "10 884 ₽", "rest": 4, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/CTS293356.png"}, {"article": "YSTX5R1409", "title": "Tracmax X-Privilo TX5 175/70 R14", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "175/70 R14", "season": "летняя", "price": 2817, "priceText": "2 817 ₽", "setText": "11 268 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "CTS293354", "title": "Goodride Ridemax G-118 175/70 R14", "brand": "Goodride", "model": "Ridemax G-118", "size": "175/70 R14", "season": "летняя", "price": 2911, "priceText": "2 911 ₽", "setText": "11 644 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "366617356", "title": "Cordiant Winter Drive PW-1 175/65 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "175/65 R14", "season": "зимняя", "price": 3070, "priceText": "3 070 ₽", "setText": "12 280 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "3415030669", "title": "Fortune FSR-802 185/60 R15", "brand": "Fortune", "model": "FSR-802", "size": "185/60 R15", "season": "летняя", "price": 3121, "priceText": "3 121 ₽", "setText": "12 484 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "YSTX5R1509", "title": "Tracmax X-Privilo TX5 185/60 R15", "brand": "Tracmax", "model": "X-Privilo TX5", "size": "185/60 R15", "season": "летняя", "price": 3121, "priceText": "3 121 ₽", "setText": "12 484 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX5/big/0.png"}, {"article": "CTS293352", "title": "Goodride Ridemax G-118 185/60 R15", "brand": "Goodride", "model": "Ridemax G-118", "size": "185/60 R15", "season": "летняя", "price": 3194, "priceText": "3 194 ₽", "setText": "12 776 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "461227050", "title": "Cordiant Winter Drive PW-1 175/70 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "175/70 R14", "season": "зимняя", "price": 3310, "priceText": "3 310 ₽", "setText": "13 240 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "16119470349", "title": "Tunga Nordway 3 175/70 R13", "brand": "Tunga", "model": "Nordway 3", "size": "175/70 R13", "season": "зимняя", "price": 3330, "priceText": "3 330 ₽", "setText": "13 320 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "CTS293347", "title": "Goodride Ridemax G-118 195/60 R15", "brand": "Goodride", "model": "Ridemax G-118", "size": "195/60 R15", "season": "летняя", "price": 3350, "priceText": "3 350 ₽", "setText": "13 400 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "3151001", "title": "Viatti Brina Nordico V-522 175/70 R13", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "175/70 R13", "season": "зимняя", "price": 3444, "priceText": "3 444 ₽", "setText": "13 776 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "457442784", "title": "Cordiant Road Runner PS-1 155/70 R13", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "155/70 R13", "season": "летняя", "price": 3510, "priceText": "3 510 ₽", "setText": "14 040 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "355815573", "title": "Cordiant Road Runner PS-1 175/70 R13", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "175/70 R13", "season": "летняя", "price": 3530, "priceText": "3 530 ₽", "setText": "14 120 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "3517030702", "title": "Fortune FSR-802 195/55 R16", "brand": "Fortune", "model": "FSR-802", "size": "195/55 R16", "season": "летняя", "price": 3550, "priceText": "3 550 ₽", "setText": "14 200 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "16119470351", "title": "Tunga Nordway 3 185/60 R14", "brand": "Tunga", "model": "Nordway 3", "size": "185/60 R14", "season": "зимняя", "price": 3550, "priceText": "3 550 ₽", "setText": "14 200 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "16100120093", "title": "Cordiant Run Tour 175/70 R13", "brand": "Cordiant", "model": "Run Tour", "size": "175/70 R13", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "16100040000", "title": "Cordiant Road Runner PS-1 185/60 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/60 R14", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "16100030000", "title": "Cordiant Road Runner PS-1 175/65 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "175/65 R14", "season": "летняя", "price": 3570, "priceText": "3 570 ₽", "setText": "14 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "366617376", "title": "Cordiant Winter Drive PW-1 185/60 R14", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "185/60 R14", "season": "зимняя", "price": 3590, "priceText": "3 590 ₽", "setText": "14 360 ₽", "rest": 13, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "16100120094", "title": "Cordiant Run Tour 175/65 R14", "brand": "Cordiant", "model": "Run Tour", "size": "175/65 R14", "season": "летняя", "price": 3610, "priceText": "3 610 ₽", "setText": "14 440 ₽", "rest": 15, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "16119470381", "title": "Tunga Nordway 3 185/65 R14", "brand": "Tunga", "model": "Nordway 3", "size": "185/65 R14", "season": "зимняя", "price": 3630, "priceText": "3 630 ₽", "setText": "14 520 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "16119470353", "title": "Tunga Nordway 3 185/60 R15", "brand": "Tunga", "model": "Nordway 3", "size": "185/60 R15", "season": "зимняя", "price": 3660, "priceText": "3 660 ₽", "setText": "14 640 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Tunga/Nordway_3/big/1.png"}, {"article": "CTS293404", "title": "Goodride Ridemax G-118 195/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "195/55 R16", "season": "летняя", "price": 3664, "priceText": "3 664 ₽", "setText": "14 656 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "3151060", "title": "Viatti Nordico 2 V-528 185/60 R14", "brand": "Viatti", "model": "Nordico 2 V-528", "size": "185/60 R14", "season": "зимняя", "price": 3673, "priceText": "3 673 ₽", "setText": "14 692 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Nordico_2_V-528/big/1.png"}, {"article": "3151004", "title": "Viatti Brina Nordico V-522 185/60 R14", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "185/60 R14", "season": "зимняя", "price": 3673, "priceText": "3 673 ₽", "setText": "14 692 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "3426030702", "title": "Fortune FSR-802 205/60 R16", "brand": "Fortune", "model": "FSR-802", "size": "205/60 R16", "season": "летняя", "price": 3769, "priceText": "3 769 ₽", "setText": "15 076 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Fortune/FSR-802/big/0.png"}, {"article": "355816321", "title": "Cordiant Road Runner PS-1 185/65 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/65 R14", "season": "летняя", "price": 3810, "priceText": "3 810 ₽", "setText": "15 240 ₽", "rest": 10, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "468326396", "title": "Cordiant Winter Drive PW-1 195/60 R15", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "195/60 R15", "season": "зимняя", "price": 3820, "priceText": "3 820 ₽", "setText": "15 280 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "CTS293368", "title": "Goodride Ridemax G-118 205/60 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "205/60 R16", "season": "летняя", "price": 3865, "priceText": "3 865 ₽", "setText": "15 460 ₽", "rest": 19, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "1024677", "title": "Hankook Kinergy Eco 2 K435 185/60 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/60 R14", "season": "летняя", "price": 3899, "priceText": "3 899 ₽", "setText": "15 596 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "YSTX3R1605", "title": "Tracmax X-Privilo TX3 215/45 R16", "brand": "Tracmax", "model": "X-Privilo TX3", "size": "215/45 R16", "season": "летняя", "price": 3978, "priceText": "3 978 ₽", "setText": "15 912 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Tracmax/X-Privilo_TX3/big/0.png"}, {"article": "4362000", "title": "Pirelli Formula Energy 175/65 R14", "brand": "Pirelli Formula", "model": "Energy", "size": "175/65 R14", "season": "летняя", "price": 3978, "priceText": "3 978 ₽", "setText": "15 912 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "553505421", "title": "Cordiant Snow Cross PW-2 175/70 R13", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "175/70 R13", "season": "зимняя", "price": 4070, "priceText": "4 070 ₽", "setText": "16 280 ₽", "rest": 21, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "PS20057", "title": "Attar W01 185/60 R15", "brand": "Attar", "model": "W01", "size": "185/60 R15", "season": "зимняя", "price": 4168, "priceText": "4 168 ₽", "setText": "16 672 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Attar/W01/big/1.png"}, {"article": "CTS293371", "title": "Goodride Ridemax G-118 215/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "215/55 R16", "season": "летняя", "price": 4179, "priceText": "4 179 ₽", "setText": "16 716 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "16100120096", "title": "Cordiant Run Tour 185/60 R15", "brand": "Cordiant", "model": "Run Tour", "size": "185/60 R15", "season": "летняя", "price": 4180, "priceText": "4 180 ₽", "setText": "16 720 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Run_Tour/big/0.png"}, {"article": "T743174", "title": "Ikon Character Eco (Nordman SX3) 195/50 R15", "brand": "Ikon", "model": "Character Eco (Nordman SX3)", "size": "195/50 R15", "season": "летняя", "price": 4228, "priceText": "4 228 ₽", "setText": "16 912 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Eco/big/0.png"}, {"article": "366617396", "title": "Cordiant Winter Drive PW-1 205/60 R16", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "205/60 R16", "season": "зимняя", "price": 4240, "priceText": "4 240 ₽", "setText": "16 960 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "355816334", "title": "Cordiant Road Runner PS-1 185/70 R14", "brand": "Cordiant", "model": "Road Runner PS-1", "size": "185/70 R14", "season": "летняя", "price": 4250, "priceText": "4 250 ₽", "setText": "17 000 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Road_Runner/big/0.png"}, {"article": "AAB2029", "title": "Antares Grip 60 ice 185/60 R15", "brand": "Antares", "model": "Grip 60 ice", "size": "185/60 R15", "season": "зимняя", "price": 4290, "priceText": "4 290 ₽", "setText": "17 160 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Antares/Grip_60_ice/big/1.png"}, {"article": "16100120302", "title": "Gislaved EcoControl 175/65 R14", "brand": "Gislaved", "model": "EcoControl", "size": "175/65 R14", "season": "летняя", "price": 4330, "priceText": "4 330 ₽", "setText": "17 320 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/EcoControl/big/0.png"}, {"article": "16100120105", "title": "Cordiant Sno-Max 7000 175/70 R13", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/70 R13", "season": "зимняя", "price": 4360, "priceText": "4 360 ₽", "setText": "17 440 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731442", "title": "Ikon Autograph Eco 3 175/70 R13", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/70 R13", "season": "летняя", "price": 4427, "priceText": "4 427 ₽", "setText": "17 708 ₽", "rest": 19, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "TS71900", "title": "Ikon Nordman 5 155/70 R13", "brand": "Ikon", "model": "Nordman 5", "size": "155/70 R13", "season": "зимняя", "price": 4428, "priceText": "4 428 ₽", "setText": "17 712 ₽", "rest": 17, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_5/big/1.png"}, {"article": "553507030", "title": "Cordiant Snow Cross PW-2 185/65 R14", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "185/65 R14", "season": "зимняя", "price": 4440, "priceText": "4 440 ₽", "setText": "17 760 ₽", "rest": 22, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "1022741", "title": "Hankook Kinergy Eco 2 K435 185/70 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/70 R14", "season": "летняя", "price": 4466, "priceText": "4 466 ₽", "setText": "17 864 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "P200015", "title": "Attar S01 205/60 R16", "brand": "Attar", "model": "S01", "size": "205/60 R16", "season": "летняя", "price": 4471, "priceText": "4 471 ₽", "setText": "17 884 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "4364400", "title": "Pirelli Formula Energy 185/55 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "185/55 R15", "season": "летняя", "price": 4477, "priceText": "4 477 ₽", "setText": "17 908 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "CTS293473", "title": "Triangle ReliaX Touring TE307 205/60 R16", "brand": "Triangle", "model": "ReliaX Touring TE307", "size": "205/60 R16", "season": "летняя", "price": 4509, "priceText": "4 509 ₽", "setText": "18 036 ₽", "rest": 8, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos_blue_restore/20260722_021105/CTS293473.png"}, {"article": "468326173", "title": "Cordiant Winter Drive PW-1 195/55 R15", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "195/55 R15", "season": "зимняя", "price": 4520, "priceText": "4 520 ₽", "setText": "18 080 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "1024676", "title": "Hankook Kinergy Eco 2 K435 185/65 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "185/65 R14", "season": "летняя", "price": 4543, "priceText": "4 543 ₽", "setText": "18 172 ₽", "rest": 32, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "1022710", "title": "Hankook Kinergy Eco 2 K435 175/70 R14", "brand": "Hankook", "model": "Kinergy Eco 2 K435", "size": "175/70 R14", "season": "летняя", "price": 4543, "priceText": "4 543 ₽", "setText": "18 172 ₽", "rest": 36, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_Eco_2_K435/big/0.png"}, {"article": "221008318", "title": "LingLong Leao Winter Defender Ice I-15 215/60 R16", "brand": "LingLong Leao", "model": "Winter Defender Ice I-15", "size": "215/60 R16", "season": "зимняя", "price": 4555, "priceText": "4 555 ₽", "setText": "18 220 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/LingLong_Leao/Winter_Defender_Ice_I-15/big/0.png"}, {"article": "4364000", "title": "Pirelli Formula Energy 195/60 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "195/60 R15", "season": "летняя", "price": 4567, "priceText": "4 567 ₽", "setText": "18 268 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "16100120107", "title": "Cordiant Sno-Max 7000 175/65 R14", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/65 R14", "season": "зимняя", "price": 4570, "priceText": "4 570 ₽", "setText": "18 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "T731445", "title": "Ikon Autograph Eco 3 175/65 R14", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/65 R14", "season": "летняя", "price": 4626, "priceText": "4 626 ₽", "setText": "18 504 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "4373600", "title": "Pirelli Ice Zero FR 175/65 R14", "brand": "Pirelli", "model": "Ice Zero FR", "size": "175/65 R14", "season": "зимняя", "price": 4657, "priceText": "4 657 ₽", "setText": "18 628 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Ice_Zero_FR/big/0.png"}, {"article": "CTS293372", "title": "Goodride Ridemax G-118 225/55 R16", "brand": "Goodride", "model": "Ridemax G-118", "size": "225/55 R16", "season": "летняя", "price": 4660, "priceText": "4 660 ₽", "setText": "18 640 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Ridemax_G-118/big/0.png"}, {"article": "TS77953", "title": "Ikon Character Ice 7 (Nordman 7) 155/80 R13", "brand": "Ikon", "model": "Character Ice 7 (Nordman 7)", "size": "155/80 R13", "season": "зимняя", "price": 4677, "priceText": "4 677 ₽", "setText": "18 708 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Ice_7/big/1.png"}, {"article": "1305231957", "title": "Cordiant Snow Cross PW-2 185/70 R14", "brand": "Cordiant", "model": "Snow Cross PW-2", "size": "185/70 R14", "season": "зимняя", "price": 4700, "priceText": "4 700 ₽", "setText": "18 800 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Snow_Cross/big/1.png"}, {"article": "16100120109", "title": "Cordiant Sno-Max 7000 175/70 R14", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "175/70 R14", "season": "зимняя", "price": 4710, "priceText": "4 710 ₽", "setText": "18 840 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "16100120117", "title": "Cordiant Sno-Max 7000 185/60 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "185/60 R15", "season": "зимняя", "price": 4730, "priceText": "4 730 ₽", "setText": "18 920 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "4362200", "title": "Pirelli Cinturato P1 175/65 R14", "brand": "Pirelli", "model": "Cinturato P1", "size": "175/65 R14", "season": "летняя", "price": 4795, "priceText": "4 795 ₽", "setText": "19 180 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4362200.png"}, {"article": "3151011", "title": "Viatti Brina Nordico V-522 195/55 R15", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "195/55 R15", "season": "зимняя", "price": 4804, "priceText": "4 804 ₽", "setText": "19 216 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "300H3003", "title": "HiFly Win-Turi 215 195/60 R15", "brand": "HiFly", "model": "Win-Turi 215", "size": "195/60 R15", "season": "зимняя", "price": 4815, "priceText": "4 815 ₽", "setText": "19 260 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "3220007344", "title": "Sailun RoadX RXMotion 4S 205/45 R16", "brand": "Sailun RoadX", "model": "RXMotion 4S", "size": "205/45 R16", "season": "всесезонная", "price": 4820, "priceText": "4 820 ₽", "setText": "19 280 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Sailun_RoadX/RXMotion_4S/big/0.png"}, {"article": "T730587", "title": "Ikon Autograph Snow 3 175/65 R14", "brand": "Ikon", "model": "Autograph Snow 3", "size": "175/65 R14", "season": "зимняя", "price": 4820, "priceText": "4 820 ₽", "setText": "19 280 ₽", "rest": 11, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Snow_3/big/0.png"}, {"article": "T731448", "title": "Ikon Autograph Eco 3 175/70 R14", "brand": "Ikon", "model": "Autograph Eco 3", "size": "175/70 R14", "season": "летняя", "price": 4825, "priceText": "4 825 ₽", "setText": "19 300 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Autograph_Eco_3/big/0.png"}, {"article": "4370000", "title": "Pirelli Formula Ice 175/65 R14", "brand": "Pirelli Formula", "model": "Ice", "size": "175/65 R14", "season": "зимняя", "price": 4867, "priceText": "4 867 ₽", "setText": "19 468 ₽", "rest": 24, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/4370000.png"}, {"article": "16100120304", "title": "Gislaved EcoControl 185/60 R15", "brand": "Gislaved", "model": "EcoControl", "size": "185/60 R15", "season": "летняя", "price": 4870, "priceText": "4 870 ₽", "setText": "19 480 ₽", "rest": 12, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/16100120304.png"}, {"article": "4364600", "title": "Pirelli Cinturato P1 195/50 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "195/50 R15", "season": "летняя", "price": 4873, "priceText": "4 873 ₽", "setText": "19 492 ₽", "rest": 9, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4364600.png"}, {"article": "P200013", "title": "Attar S01 195/55 R16", "brand": "Attar", "model": "S01", "size": "195/55 R16", "season": "летняя", "price": 4873, "priceText": "4 873 ₽", "setText": "19 492 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Attar/S01/big/0.png"}, {"article": "TS72290", "title": "Ikon Nordman 7 175/65 R15", "brand": "Ikon", "model": "Nordman 7", "size": "175/65 R15", "season": "зимняя", "price": 4879, "priceText": "4 879 ₽", "setText": "19 516 ₽", "rest": 15, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Nordman_7/big/1.png"}, {"article": "R2430", "title": "Yokohama BluEarth-Es ES32 185/65 R14", "brand": "Yokohama", "model": "BluEarth-Es ES32", "size": "185/65 R14", "season": "летняя", "price": 4879, "priceText": "4 879 ₽", "setText": "19 516 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Yokohama/BluEarth-Es_ES32/big/0.png"}, {"article": "16100120121", "title": "Cordiant Sno-Max 7000 195/60 R15", "brand": "Cordiant", "model": "Sno-Max 7000", "size": "195/60 R15", "season": "зимняя", "price": 4890, "priceText": "4 890 ₽", "setText": "19 560 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Sno-Max_7000/big/1.png"}, {"article": "0348031", "title": "Gislaved Nord Frost 200 185/60 R14", "brand": "Gislaved", "model": "Nord Frost 200", "size": "185/60 R14", "season": "зимняя", "price": 4900, "priceText": "4 900 ₽", "setText": "19 600 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "0348011", "title": "Gislaved Nord Frost 200 175/70 R14", "brand": "Gislaved", "model": "Nord Frost 200", "size": "175/70 R14", "season": "зимняя", "price": 4910, "priceText": "4 910 ₽", "setText": "19 640 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "CTS293410", "title": "Goodride ZuperEco Z-107 215/60 R17", "brand": "Goodride", "model": "ZuperEco Z-107", "size": "215/60 R17", "season": "летняя", "price": 4911, "priceText": "4 911 ₽", "setText": "19 644 ₽", "rest": 7, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/ZuperEco_Z-107/big/0.png"}, {"article": "221002007", "title": "LingLong Leao Nova-Force 235/45 R17", "brand": "LingLong Leao", "model": "Nova-Force", "size": "235/45 R17", "season": "летняя", "price": 4961, "priceText": "4 961 ₽", "setText": "19 844 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/LingLong_Leao/Nova-Force/big/0.png"}, {"article": "AAB3076", "title": "Antares Grip 60 ice 205/60 R16", "brand": "Antares", "model": "Grip 60 ice", "size": "205/60 R16", "season": "зимняя", "price": 4990, "priceText": "4 990 ₽", "setText": "19 960 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Antares/Grip_60_ice/big/1.png"}, {"article": "T742963", "title": "Ikon Character Snow 2 (Nordman RS2) 175/65 R15", "brand": "Ikon", "model": "Character Snow 2 (Nordman RS2)", "size": "175/65 R15", "season": "зимняя", "price": 5019, "priceText": "5 019 ₽", "setText": "20 076 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Snow_2/big/0.png"}, {"article": "4370400", "title": "Pirelli Formula Ice 185/65 R14", "brand": "Pirelli Formula", "model": "Ice", "size": "185/65 R14", "season": "зимняя", "price": 5023, "priceText": "5 023 ₽", "setText": "20 092 ₽", "rest": 29, "image": "https://www.4tochki.ru/pictures/tyres/Formula/Formula_Ice/big/1.png"}, {"article": "16100120325", "title": "Gislaved EcoControl 195/60 R15", "brand": "Gislaved", "model": "EcoControl", "size": "195/60 R15", "season": "летняя", "price": 5040, "priceText": "5 040 ₽", "setText": "20 160 ₽", "rest": 8, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/16100120325.png"}, {"article": "TS77983", "title": "Ikon Character Ice 7 (Nordman 7) 165/65 R14", "brand": "Ikon", "model": "Character Ice 7 (Nordman 7)", "size": "165/65 R14", "season": "зимняя", "price": 5048, "priceText": "5 048 ₽", "setText": "20 192 ₽", "rest": 21, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Ice_7/big/1.png"}, {"article": "T742968", "title": "Ikon Character Snow 2 (Nordman RS2) 185/60 R15", "brand": "Ikon", "model": "Character Snow 2 (Nordman RS2)", "size": "185/60 R15", "season": "зимняя", "price": 5057, "priceText": "5 057 ₽", "setText": "20 228 ₽", "rest": 9, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Snow_2/big/0.png"}, {"article": "0348019", "title": "Gislaved Nord Frost 200 185/65 R14", "brand": "Gislaved", "model": "Nord Frost 200", "size": "185/65 R14", "season": "зимняя", "price": 5070, "priceText": "5 070 ₽", "setText": "20 280 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Nord_Frost_200/big/1.png"}, {"article": "3150083", "title": "Viatti Bosco S/T V-526 205/70 R15", "brand": "Viatti", "model": "Bosco S/T V-526", "size": "205/70 R15", "season": "зимняя", "price": 5113, "priceText": "5 113 ₽", "setText": "20 452 ₽", "rest": 24, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Bosco_S_T_V-526/big/0.jpg"}, {"article": "TS77916", "title": "Ikon Character Ice 5 (Nordman 5) 155/70 R13", "brand": "Ikon", "model": "Character Ice 5 (Nordman 5)", "size": "155/70 R13", "season": "зимняя", "price": 5114, "priceText": "5 114 ₽", "setText": "20 456 ₽", "rest": 35, "image": "https://www.4tochki.ru/pictures/tyres/Ikon/Character_Ice_5_(Nordman_5)/big/1.png"}, {"article": "3151032", "title": "Viatti Bosco Nordico V-523 205/70 R15", "brand": "Viatti", "model": "Bosco Nordico V-523", "size": "205/70 R15", "season": "зимняя", "price": 5120, "priceText": "5 120 ₽", "setText": "20 480 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Bosco_Nordico_V-523/big/1.jpg"}, {"article": "T742969", "title": "Ikon Character Snow 2 (Nordman RS2) 195/60 R15", "brand": "Ikon", "model": "Character Snow 2 (Nordman RS2)", "size": "195/60 R15", "season": "зимняя", "price": 5124, "priceText": "5 124 ₽", "setText": "20 496 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Snow_2/big/0.png"}, {"article": "4370500", "title": "Pirelli Formula Ice 185/60 R15", "brand": "Pirelli Formula", "model": "Ice", "size": "185/60 R15", "season": "зимняя", "price": 5132, "priceText": "5 132 ₽", "setText": "20 528 ₽", "rest": 40, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/4370500.png"}, {"article": "4364100", "title": "Pirelli Formula Energy 195/55 R15", "brand": "Pirelli Formula", "model": "Energy", "size": "195/55 R15", "season": "летняя", "price": 5150, "priceText": "5 150 ₽", "setText": "20 600 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "3150023", "title": "Viatti Brina V-521 215/50 R17", "brand": "Viatti", "model": "Brina V-521", "size": "215/50 R17", "season": "зимняя", "price": 5162, "priceText": "5 162 ₽", "setText": "20 648 ₽", "rest": 15, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_V-521/big/0.jpg"}, {"article": "221006500", "title": "LingLong Leao Nova-Force 225/55 R17", "brand": "LingLong Leao", "model": "Nova-Force", "size": "225/55 R17", "season": "летняя", "price": 5175, "priceText": "5 175 ₽", "setText": "20 700 ₽", "rest": 5, "image": "https://www.4tochki.ru/pictures/tyres/LingLong_Leao/Nova-Force/big/0.png"}, {"article": "TS77957", "title": "Ikon Character Ice 7 (Nordman 7) 185/60 R15", "brand": "Ikon", "model": "Character Ice 7 (Nordman 7)", "size": "185/60 R15", "season": "зимняя", "price": 5276, "priceText": "5 276 ₽", "setText": "21 104 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Ikon_Tyres/Character_Ice_7/big/1.png"}, {"article": "16111570146", "title": "Gislaved SpikeControl 185/65 R14", "brand": "Gislaved", "model": "SpikeControl", "size": "185/65 R14", "season": "зимняя", "price": 5280, "priceText": "5 280 ₽", "setText": "21 120 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "4363800", "title": "Pirelli Cinturato P1 185/60 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "185/60 R15", "season": "летняя", "price": 5288, "priceText": "5 288 ₽", "setText": "21 152 ₽", "rest": 20, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4363800.png"}, {"article": "YSTX3R1714", "title": "Tracmax X-Privilo TX3 235/55 R17", "brand": "Tracmax", "model": "X-Privilo TX3", "size": "235/55 R17", "season": "летняя", "price": 5288, "priceText": "5 288 ₽", "setText": "21 152 ₽", "rest": 23, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/YSTX3R1714.png"}, {"article": "16111570144", "title": "Gislaved SpikeControl 185/60 R14", "brand": "Gislaved", "model": "SpikeControl", "size": "185/60 R14", "season": "зимняя", "price": 5300, "priceText": "5 300 ₽", "setText": "21 200 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "CTS293397", "title": "Goodride Zuper Trek Z-203 225/65 R17", "brand": "Goodride", "model": "Zuper Trek Z-203", "size": "225/65 R17", "season": "летняя", "price": 5330, "priceText": "5 330 ₽", "setText": "21 320 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Goodride/Zuper_Trek_Z-203/big/0.png"}, {"article": "JSGS29", "title": "Landspider Arctictraxx 205/60 R16", "brand": "Landspider", "model": "Arctictraxx", "size": "205/60 R16", "season": "зимняя", "price": 5387, "priceText": "5 387 ₽", "setText": "21 548 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/Landspider/Arctictraxx/big/1.png"}, {"article": "4371000", "title": "Pirelli Formula Ice 195/60 R15", "brand": "Pirelli Formula", "model": "Ice", "size": "195/60 R15", "season": "зимняя", "price": 5402, "priceText": "5 402 ₽", "setText": "21 608 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Formula/Formula_Ice/big/1.png"}, {"article": "4372000", "title": "Pirelli Formula Ice 185/55 R15", "brand": "Pirelli Formula", "model": "Ice", "size": "185/55 R15", "season": "зимняя", "price": 5408, "priceText": "5 408 ₽", "setText": "21 632 ₽", "rest": 25, "image": "https://www.4tochki.ru/pictures/tyres/Formula/Formula_Ice/big/1.png"}, {"article": "4363300", "title": "Pirelli Cinturato P1 195/60 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "195/60 R15", "season": "летняя", "price": 5462, "priceText": "5 462 ₽", "setText": "21 848 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4363300.png"}, {"article": "3151072", "title": "Viatti Nordico 2 V-528 205/65 R16", "brand": "Viatti", "model": "Nordico 2 V-528", "size": "205/65 R16", "season": "зимняя", "price": 5466, "priceText": "5 466 ₽", "setText": "21 864 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Nordico_2_V-528/big/1.png"}, {"article": "3151017", "title": "Viatti Brina Nordico V-522 205/65 R16", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "205/65 R16", "season": "зимняя", "price": 5466, "priceText": "5 466 ₽", "setText": "21 864 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "16111570180", "title": "Gislaved SpikeControl 185/60 R15", "brand": "Gislaved", "model": "SpikeControl", "size": "185/60 R15", "season": "зимняя", "price": 5520, "priceText": "5 520 ₽", "setText": "22 080 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/SpikeControl/big/1.png"}, {"article": "300H3004", "title": "HiFly Win-Turi 215 205/60 R16", "brand": "HiFly", "model": "Win-Turi 215", "size": "205/60 R16", "season": "зимняя", "price": 5550, "priceText": "5 550 ₽", "setText": "22 200 ₽", "rest": 6, "image": "https://www.4tochki.ru/pictures/tyres/HiFly/Win-Turi_215/big/1.png"}, {"article": "1024948", "title": "Hankook Kinergy 4s2 H750 195/50 R15", "brand": "Hankook", "model": "Kinergy 4s2 H750", "size": "195/50 R15", "season": "всесезонная", "price": 5569, "priceText": "5 569 ₽", "setText": "22 276 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_4s2_H750/big/0.png"}, {"article": "4402300", "title": "Pirelli Formula Ice FR 205/60 R16", "brand": "Pirelli Formula", "model": "Ice FR", "size": "205/60 R16", "season": "зимняя", "price": 5570, "priceText": "5 570 ₽", "setText": "22 280 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Ice_FR/big/0.png"}, {"article": "4405400", "title": "Pirelli Cinturato P1 185/55 R15", "brand": "Pirelli", "model": "Cinturato P1", "size": "185/55 R15", "season": "летняя", "price": 5582, "priceText": "5 582 ₽", "setText": "22 328 ₽", "rest": 9, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli/Cinturato_P1/big/4405400.png"}, {"article": "3220006479", "title": "Sailun Ice Blazer WST3 185/80 R14", "brand": "Sailun", "model": "Ice Blazer WST3", "size": "185/80 R14", "season": "зимняя", "price": 5599, "priceText": "5 599 ₽", "setText": "22 396 ₽", "rest": 4, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/3220006479.png"}, {"article": "0348161", "title": "Gislaved Soft Frost 200 185/55 R15", "brand": "Gislaved", "model": "Soft Frost 200", "size": "185/55 R15", "season": "зимняя", "price": 5600, "priceText": "5 600 ₽", "setText": "22 400 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}, {"article": "3151019", "title": "Viatti Brina Nordico V-522 215/60 R16", "brand": "Viatti", "model": "Brina Nordico V-522", "size": "215/60 R16", "season": "зимняя", "price": 5608, "priceText": "5 608 ₽", "setText": "22 432 ₽", "rest": 12, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Brina_Nordico_V-522/big/1.jpg"}, {"article": "4364300", "title": "Pirelli Formula Energy 205/60 R16", "brand": "Pirelli Formula", "model": "Energy", "size": "205/60 R16", "season": "летняя", "price": 5612, "priceText": "5 612 ₽", "setText": "22 448 ₽", "rest": 4, "image": "https://www.4tochki.ru/pictures/tyres/Pirelli_Formula/Energy/big/0.png"}, {"article": "YSTX3R1926", "title": "Tracmax X-Privilo TX3 235/45 R19", "brand": "Tracmax", "model": "X-Privilo TX3", "size": "235/45 R19", "season": "летняя", "price": 5634, "priceText": "5 634 ₽", "setText": "22 536 ₽", "rest": 22, "image": "https://cdn.jsdelivr.net/gh/test4433/avito-feed@main/rado_photos/YSTX3R1926.png"}, {"article": "3150090", "title": "Viatti Bosco S/T V-526 215/60 R17", "brand": "Viatti", "model": "Bosco S/T V-526", "size": "215/60 R17", "season": "зимняя", "price": 5678, "priceText": "5 678 ₽", "setText": "22 712 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Viatti/Bosco_S_T_V-526/big/0.jpg"}, {"article": "1024949", "title": "Hankook Kinergy 4s2 H750 205/65 R15", "brand": "Hankook", "model": "Kinergy 4s2 H750", "size": "205/65 R15", "season": "всесезонная", "price": 5711, "priceText": "5 711 ₽", "setText": "22 844 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Kinergy_4s2_H750/big/0.png"}, {"article": "1021015", "title": "Hankook Ventus Prime 3 K125 195/55 R15", "brand": "Hankook", "model": "Ventus Prime 3 K125", "size": "195/55 R15", "season": "летняя", "price": 5742, "priceText": "5 742 ₽", "setText": "22 968 ₽", "rest": 41, "image": "https://www.4tochki.ru/pictures/tyres/Hankook/Ventus_Prime_3_K125/big/0.png"}, {"article": "650856846", "title": "Cordiant Winter Drive PW-1 215/55 R17", "brand": "Cordiant", "model": "Winter Drive PW-1", "size": "215/55 R17", "season": "зимняя", "price": 5790, "priceText": "5 790 ₽", "setText": "23 160 ₽", "rest": 8, "image": "https://www.4tochki.ru/pictures/tyres/Cordiant/Winter_Drive/big/0.png"}, {"article": "0348159", "title": "Gislaved Soft Frost 200 205/60 R16", "brand": "Gislaved", "model": "Soft Frost 200", "size": "205/60 R16", "season": "зимняя", "price": 5830, "priceText": "5 830 ₽", "setText": "23 320 ₽", "rest": 16, "image": "https://www.4tochki.ru/pictures/tyres/Gislaved/Soft_Frost_200/big/0.png"}];
+const modes = ["size", "season", "budget", "result"];
+const modeCopy = {
+  size: ["Выберите размер", "Потяните орбиту и нажмите на подходящий размер."],
+  season: ["Какой сезон?", "После выбора кольцо перестроится под бюджет."],
+  budget: ["Выберите цену", "Покажу только доступные комплекты в вашем диапазоне."],
+  result: ["Подходящие шины", "Вращайте варианты вокруг шины и выбирайте комплект."]
+};
 let state = {
+  mode: "size",
   size: "195/65 R15",
   season: "",
   budget: "",
   search: "",
   selectedArticle: ""
 };
-let catalog = { search: "", season: "", min: "", max: "" };
+let rotation = -0.45;
+let targetRotation = null;
+let dragging = false;
+let dragStartX = 0;
+let dragStartRotation = 0;
+let lastFrame = performance.now();
+let optionElements = [];
 
 const $ = (id) => document.getElementById(id);
+const norm = (value) => String(value || "").toLowerCase().replace(/r/i, " r").replace(/\s+/g, " ").trim();
 const esc = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#39;"
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
 }[char]));
-const norm = (value) => String(value || "").toLowerCase().replace("r", " r").replace(/\s+/g, " ").trim();
-const money = (value) => `${Number(value || 0).toLocaleString("ru-RU")} ₽`;
 
 function uniqueSizes() {
   const priority = ["195/65 R15", "205/55 R16", "185/65 R15", "215/65 R16", "205/60 R16", "225/45 R17"];
   const all = [...new Set(ITEMS.map((item) => item.size))];
-  return [...priority.filter((size) => all.includes(size)), ...all.filter((size) => !priority.includes(size))].slice(0, 10);
+  return [...priority.filter((size) => all.includes(size)), ...all.filter((size) => !priority.includes(size))].slice(0, 14);
 }
 
-function filteredBase() {
+function filteredItems() {
   return ITEMS.filter((item) => {
     const haystack = norm([item.title, item.brand, item.model, item.size].join(" "));
-    const bySize = !state.size || item.size === state.size;
-    const bySeason = !state.season || item.season === state.season;
-    const byBudget = !state.budget || item.price <= Number(state.budget);
-    const bySearch = !state.search || haystack.includes(norm(state.search));
-    return bySize && bySeason && byBudget && bySearch;
+    return (!state.size || item.size === state.size)
+      && (!state.season || item.season === state.season)
+      && (!state.budget || item.price <= Number(state.budget))
+      && (!state.search || haystack.includes(norm(state.search)));
   }).sort((a, b) => a.price - b.price);
 }
 
-function selectedItem(rows) {
+function currentItem() {
+  const rows = filteredItems();
   return rows.find((item) => item.article === state.selectedArticle) || rows[0] || ITEMS[0];
 }
 
-function requestText(item) {
-  return `Здравствуйте. Интересуют шины ${item.title}. Цена ${item.priceText}/шт, комплект ${item.setText}. Артикул ${item.article}.`;
+function optionsForMode() {
+  if (state.mode === "size") {
+    return uniqueSizes().map((size) => ({
+      value: size,
+      label: size,
+      sub: `${ITEMS.filter((item) => item.size === size).length} вариантов`,
+      active: size === state.size
+    }));
+  }
+  if (state.mode === "season") {
+    return [
+      { value: "", label: "Любой сезон", sub: "показать всё", active: state.season === "" },
+      { value: "летняя", label: "Летние", sub: "для теплого сезона", active: state.season === "летняя" },
+      { value: "зимняя", label: "Зимние", sub: "для холода и снега", active: state.season === "зимняя" }
+    ];
+  }
+  if (state.mode === "budget") {
+    return [
+      { value: "4000", label: "до 4 000 ₽", sub: "за одну шину", active: state.budget === "4000" },
+      { value: "5000", label: "до 5 000 ₽", sub: "за одну шину", active: state.budget === "5000" },
+      { value: "7000", label: "до 7 000 ₽", sub: "за одну шину", active: state.budget === "7000" },
+      { value: "10000", label: "до 10 000 ₽", sub: "за одну шину", active: state.budget === "10000" },
+      { value: "", label: "Без лимита", sub: "показать всё", active: state.budget === "" }
+    ];
+  }
+  return filteredItems().slice(0, 12).map((item) => ({
+    value: item.article,
+    label: item.brand,
+    sub: `${item.model} · ${item.priceText}`,
+    active: item.article === currentItem().article,
+    item
+  }));
 }
 
-async function copyItem(item) {
+function setMode(mode) {
+  state.mode = mode;
+  rotation = -0.45;
+  targetRotation = null;
+  render();
+}
+
+function chooseOption(option, index) {
+  if (state.mode === "size") {
+    state.size = option.value;
+    state.selectedArticle = "";
+  } else if (state.mode === "season") {
+    state.season = option.value;
+    state.selectedArticle = "";
+  } else if (state.mode === "budget") {
+    state.budget = option.value;
+    state.selectedArticle = "";
+  } else {
+    state.selectedArticle = option.value;
+  }
+  const total = Math.max(1, optionElements.length);
+  targetRotation = Math.PI / 2 - (index / total) * Math.PI * 2;
+  updateDock();
+  if (state.mode !== "result") {
+    window.setTimeout(() => setMode(modes[modes.indexOf(state.mode) + 1]), 260);
+  } else {
+    renderOrbit();
+  }
+}
+
+function renderSteps() {
+  const currentIndex = modes.indexOf(state.mode);
+  document.querySelectorAll(".step").forEach((button, index) => {
+    button.classList.toggle("active", button.dataset.mode === state.mode);
+    button.classList.toggle("done", index < currentIndex);
+  });
+}
+
+function renderOrbit() {
+  const layer = $("orbitLayer");
+  layer.innerHTML = "";
+  optionElements = optionsForMode().map((option, index) => {
+    const button = document.createElement("button");
+    button.className = `orbit-option ${state.mode === "result" ? "result" : ""} ${option.active ? "active" : ""}`;
+    button.innerHTML = `<b>${esc(option.label)}</b><small>${esc(option.sub)}</small>`;
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      chooseOption(option, index);
+    });
+    layer.appendChild(button);
+    return { element: button, option, index };
+  });
+  positionOrbit();
+}
+
+function positionOrbit() {
+  const field = $("orbitalField");
+  const width = field.clientWidth;
+  const height = field.clientHeight;
+  const centerX = width / 2;
+  const centerY = height * .52;
+  const rx = Math.min(width * (window.innerWidth <= 620 ? .50 : .42), 620);
+  const ry = Math.min(height * (window.innerWidth <= 620 ? .27 : .30), 255);
+  const total = Math.max(1, optionElements.length);
+
+  optionElements.forEach(({ element, index }) => {
+    const angle = rotation + (index / total) * Math.PI * 2;
+    const sin = Math.sin(angle);
+    const depth = (sin + 1) / 2;
+    const x = centerX + Math.cos(angle) * rx;
+    const y = centerY + sin * ry;
+    const scale = .68 + depth * .42;
+    element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale})`;
+    element.style.opacity = String(.34 + depth * .66);
+    element.style.zIndex = String(10 + Math.round(depth * 40));
+    element.style.filter = `blur(${(1 - depth) * .55}px)`;
+  });
+}
+
+function updateDock() {
+  const item = currentItem();
+  const rows = filteredItems();
+  if (!item) return;
+  state.selectedArticle = item.article;
+  $("productTitle").textContent = item.title;
+  $("productMeta").textContent = `${item.season || "сезон не указан"} · остаток ${item.rest} · найдено ${rows.length}`;
+  $("productPrice").textContent = item.priceText;
+  $("productSet").textContent = item.setText;
+  $("aiText").textContent = state.mode === "result"
+    ? `Нашел ${rows.length} вариантов. Впереди самый выгодный, остальные вращаются вокруг шины.`
+    : modeCopy[state.mode][1];
+}
+
+function render() {
+  $("modeTitle").textContent = modeCopy[state.mode][0];
+  renderSteps();
+  renderOrbit();
+  updateDock();
+}
+
+function animate(now) {
+  const delta = Math.min(40, now - lastFrame);
+  lastFrame = now;
+  if (targetRotation !== null) {
+    const distance = targetRotation - rotation;
+    rotation += distance * .10;
+    if (Math.abs(distance) < .002) targetRotation = null;
+  } else if (!dragging) {
+    rotation += delta * .000055;
+  }
+  positionOrbit();
+  requestAnimationFrame(animate);
+}
+
+function requestText(item) {
+  return `Здравствуйте. Хочу забронировать ${item.title}. Цена ${item.priceText} за штуку, комплект ${item.setText}. Артикул ${item.article}.`;
+}
+
+async function copyRequest() {
+  const item = currentItem();
+  if (!item) return;
   await navigator.clipboard.writeText(requestText(item));
   $("toast").classList.add("show");
-  setTimeout(() => $("toast").classList.remove("show"), 1400);
+  window.setTimeout(() => $("toast").classList.remove("show"), 1500);
 }
 
-async function shareItem(item) {
+async function shareRequest() {
+  const item = currentItem();
+  if (!item) return;
   if (navigator.share) {
     try {
       await navigator.share({ title: item.title, text: requestText(item) });
       return;
     } catch (error) {}
   }
-  copyItem(item);
+  copyRequest();
 }
 
-function node(label, sub, group, value, angle, radius, active) {
-  const btn = document.createElement("button");
-  btn.className = `orbit-node ${group} ${active ? "active" : ""}`;
-  btn.style.setProperty("--a", `${angle}deg`);
-  btn.style.setProperty("--r", `${radius}px`);
-  btn.dataset.group = group;
-  btn.dataset.value = value;
-  btn.innerHTML = `${esc(label)}<small>${esc(sub)}</small>`;
-  return btn;
-}
-
-function renderOrbit(rows) {
-  const system = $("orbitSystem");
-  system.querySelectorAll(".orbit-node").forEach((item) => item.remove());
-
-  const sizes = uniqueSizes();
-  sizes.forEach((size, index) => {
-    const angle = -155 + index * (310 / Math.max(1, sizes.length - 1));
-    const count = ITEMS.filter((item) => item.size === size).length;
-    system.appendChild(node(size, `${count} шт. на складе`, "size", size, angle, 335, size === state.size));
-  });
-
-  const seasons = [
-    { label: "любой сезон", value: "", sub: "не сужать" },
-    { label: "летняя", value: "летняя", sub: "лето" },
-    { label: "зимняя", value: "зимняя", sub: "зима" }
-  ];
-  seasons.forEach((season, index) => {
-    const angle = 210 + index * 60;
-    system.appendChild(node(season.label, season.sub, "season", season.value, angle, 260, season.value === state.season));
-  });
-
-  const budgets = [
-    { label: "до 4 000", value: "4000" },
-    { label: "до 5 000", value: "5000" },
-    { label: "до 7 000", value: "7000" },
-    { label: "без лимита", value: "" }
-  ];
-  budgets.forEach((budget, index) => {
-    const angle = 35 + index * 72;
-    system.appendChild(node(budget.label, "бюджет/шт", "budget", budget.value, angle, 188, budget.value === state.budget));
-  });
-
-  rows.slice(0, 4).forEach((item, index) => {
-    const angle = 22 + index * 84;
-    const active = item.article === selectedItem(rows).article;
-    system.appendChild(node(item.brand || "Шины", item.priceText, "product", item.article, angle, 120, active));
-  });
-}
-
-function card(item, type = "catalog") {
-  return `<article class="${type === "mini" ? "mini-card" : "catalog-card"}">
-    <div class="${type === "mini" ? "mini-photo" : "catalog-photo"}"><img src="${esc(item.image)}" alt=""></div>
-    <div class="${type === "mini" ? "mini-title" : "catalog-title"}">${esc(item.title)}</div>
-    <div class="${type === "mini" ? "mini-price" : "catalog-price"}">${esc(item.priceText)}</div>
-    <p style="margin:6px 0 0;color:var(--muted);font-size:14px">Комплект ${esc(item.setText)} · остаток ${item.rest}</p>
-    <div class="catalog-actions">
-      <button class="btn primary" data-copy="${esc(item.article)}">Заявка</button>
-      <button class="btn" data-select="${esc(item.article)}">↗</button>
-    </div>
-  </article>`;
-}
-
-function renderMini(rows) {
-  const cheap = rows[0];
-  const middle = rows[Math.floor(rows.length / 2)] || cheap;
-  const premium = [...rows].sort((a, b) => b.price - a.price)[0] || cheap;
-  const picked = [cheap, middle, premium].filter(Boolean);
-  $("miniResults").innerHTML = picked.map((item) => card(item, "mini")).join("");
-}
-
-function renderCatalog() {
-  const rows = ITEMS.filter((item) => {
-    const haystack = norm([item.title, item.brand, item.model, item.size].join(" "));
-    return (!catalog.search || haystack.includes(norm(catalog.search)))
-      && (!catalog.season || item.season === catalog.season)
-      && (!catalog.min || item.price >= Number(catalog.min))
-      && (!catalog.max || item.price <= Number(catalog.max));
-  }).sort((a, b) => a.price - b.price);
-  $("catalogGrid").innerHTML = rows.slice(0, 24).map((item) => card(item)).join("");
-}
-
-function render() {
-  const rows = filteredBase();
-  const current = selectedItem(rows);
-  if (!current) return;
-  state.selectedArticle = current.article;
-
-  $("mainImage").src = current.image;
-  $("mainTitle").textContent = current.title;
-  $("mainMeta").textContent = `${current.season || "сезон не указан"} · остаток ${current.rest} · артикул ${current.article}`;
-  $("mainPrice").textContent = current.priceText;
-  $("mainSet").textContent = `Комплект ${current.setText}`;
-  $("statSize").textContent = state.size || "любой";
-  $("statCount").textContent = rows.length;
-  $("statPrice").textContent = current.priceText;
-  $("statSet").textContent = current.setText;
-  $("aiText").textContent = rows.length
-    ? `Нашел ${rows.length} вариантов. Сейчас в центре самый выгодный комплект под выбранную орбиту.`
-    : "Под эту связку ничего не нашел. Ослабьте бюджет или сезон.";
-
-  renderOrbit(rows);
-  renderMini(rows);
-  renderCatalog();
-}
-
-$("orbitSystem").addEventListener("click", (event) => {
-  const btn = event.target.closest(".orbit-node");
-  if (!btn) return;
-  if (btn.dataset.group === "size") state.size = btn.dataset.value;
-  if (btn.dataset.group === "season") state.season = btn.dataset.value;
-  if (btn.dataset.group === "budget") state.budget = btn.dataset.value;
-  if (btn.dataset.group === "product") state.selectedArticle = btn.dataset.value;
-  render();
+document.querySelectorAll(".step").forEach((button) => {
+  button.addEventListener("click", () => setMode(button.dataset.mode));
 });
 
-$("orbitSearch").addEventListener("input", (event) => {
-  state.search = event.target.value;
-  render();
+$("orbitalField").addEventListener("pointerdown", (event) => {
+  dragging = true;
+  dragStartX = event.clientX;
+  dragStartRotation = rotation;
+  targetRotation = null;
+  $("orbitalField").setPointerCapture(event.pointerId);
 });
-$("resetBtn").addEventListener("click", () => {
-  state = { size: "195/65 R15", season: "", budget: "", search: "", selectedArticle: "" };
-  $("orbitSearch").value = "";
-  render();
+$("orbitalField").addEventListener("pointermove", (event) => {
+  if (!dragging) return;
+  rotation = dragStartRotation + (event.clientX - dragStartX) * .007;
 });
-$("copyMain").addEventListener("click", () => copyItem(selectedItem(filteredBase())));
-$("shareMain").addEventListener("click", () => shareItem(selectedItem(filteredBase())));
+$("orbitalField").addEventListener("pointerup", () => { dragging = false; });
+$("orbitalField").addEventListener("pointercancel", () => { dragging = false; });
+$("orbitalField").addEventListener("wheel", (event) => {
+  event.preventDefault();
+  targetRotation = null;
+  rotation += (event.deltaY + event.deltaX) * .0012;
+}, { passive: false });
+$("orbitalField").addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") rotation -= .18;
+  if (event.key === "ArrowRight") rotation += .18;
+});
 
-document.body.addEventListener("click", (event) => {
-  const copyBtn = event.target.closest("[data-copy]");
-  const selectBtn = event.target.closest("[data-select]");
-  if (copyBtn) {
-    const item = ITEMS.find((row) => row.article === copyBtn.dataset.copy);
-    if (item) copyItem(item);
-  }
-  if (selectBtn) {
-    state.selectedArticle = selectBtn.dataset.select;
-    const item = ITEMS.find((row) => row.article === state.selectedArticle);
-    if (item) state.size = item.size;
-    render();
-    document.querySelector("#orbit").scrollIntoView({ behavior: "smooth" });
+function applySearch() {
+  state.search = $("aiSearch").value;
+  state.selectedArticle = "";
+  setMode("result");
+}
+$("searchBtn").addEventListener("click", applySearch);
+$("aiSearch").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") applySearch();
+});
+$("aiSearch").addEventListener("input", (event) => {
+  if (!event.target.value) {
+    state.search = "";
+    if (state.mode === "result") render();
   }
 });
-
-$("catSearch").addEventListener("input", (event) => { catalog.search = event.target.value; renderCatalog(); });
-$("catSeason").addEventListener("change", (event) => { catalog.season = event.target.value; renderCatalog(); });
-$("catMin").addEventListener("input", (event) => { catalog.min = event.target.value; renderCatalog(); });
-$("catMax").addEventListener("input", (event) => { catalog.max = event.target.value; renderCatalog(); });
+$("orderBtn").addEventListener("click", copyRequest);
+$("shareBtn").addEventListener("click", shareRequest);
+window.addEventListener("resize", positionOrbit);
 
 render();
+requestAnimationFrame(animate);
 </script>
 </body>
 </html>
