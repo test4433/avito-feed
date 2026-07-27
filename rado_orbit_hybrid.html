@@ -71,33 +71,11 @@ button { cursor: pointer; }
   letter-spacing: .2em;
   text-transform: uppercase;
 }
-.search {
-  width: min(520px, 42vw);
+.top-note {
   margin-left: auto;
-  position: relative;
-}
-.search input {
-  width: 100%;
-  height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  outline: 0;
-  color: #fff;
-  background: rgba(255, 255, 255, .075);
-  padding: 0 48px 0 16px;
-}
-.search input:focus { border-color: rgba(91, 201, 255, .72); box-shadow: 0 0 0 4px rgba(71, 184, 255, .10); }
-.search button {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  width: 34px;
-  height: 34px;
-  border: 0;
-  border-radius: 10px;
-  color: #06101d;
-  background: var(--cyan);
-  font-weight: 950;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
 }
 .stock {
   display: flex;
@@ -119,7 +97,7 @@ button { cursor: pointer; }
 .stepper {
   position: absolute;
   z-index: 70;
-  top: 174px;
+  top: 216px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -153,48 +131,118 @@ button { cursor: pointer; }
   outline: none;
   perspective: 1300px;
 }
-.classic-helper {
+.market-search {
   position: absolute;
   z-index: 72;
-  top: 88px;
+  top: 86px;
   left: 50%;
   width: min(1180px, calc(100vw - 40px));
-  min-height: 66px;
+  min-height: 112px;
   transform: translateX(-50%);
-  display: grid;
-  grid-template-columns: minmax(230px, 1fr) repeat(3, auto);
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px 8px 18px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(5, 14, 28, .72);
   box-shadow: 0 18px 60px rgba(0, 0, 0, .22);
   backdrop-filter: blur(24px);
 }
-.classic-copy b { display: block; font-size: 15px; }
-.classic-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
-.classic-action {
-  min-height: 46px;
+.market-search-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+}
+.catalog-button,
+.search-submit {
+  min-height: 48px;
   border: 1px solid var(--line);
   border-radius: 13px;
-  color: #eaf6ff;
-  background: rgba(255,255,255,.065);
-  padding: 0 15px;
-  font-size: 12px;
-  font-weight: 900;
+  padding: 0 18px;
+  font-weight: 950;
   white-space: nowrap;
 }
-.classic-action:hover,
-.classic-action:focus-visible {
-  border-color: rgba(110, 213, 255, .72);
-  background: rgba(47, 139, 203, .22);
-  outline: 0;
-}
-.classic-action.primary {
+.catalog-button {
   color: #07111e;
   border-color: transparent;
   background: linear-gradient(135deg, #eefaff, #76d5ff);
+}
+.search-submit {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #ff5149, #ff8243);
+}
+.market-input-wrap { position: relative; }
+.market-input-wrap input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  outline: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, .075);
+  padding: 0 16px;
+  font-size: 15px;
+}
+.market-input-wrap input:focus {
+  border-color: rgba(110, 213, 255, .72);
+  box-shadow: 0 0 0 4px rgba(71, 184, 255, .10);
+  outline: 0;
+}
+.search-suggest {
+  position: absolute;
+  z-index: 100;
+  top: 54px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(4, 12, 25, .98);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .48);
+}
+.search-suggest[hidden] { display: none; }
+.suggestion {
+  width: 100%;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(151, 205, 255, .12);
+  color: #edf8ff;
+  background: transparent;
+  padding: 8px 12px;
+  text-align: left;
+}
+.suggestion:last-child { border-bottom: 0; }
+.suggestion:hover, .suggestion:focus-visible { background: rgba(71, 184, 255, .14); outline: 0; }
+.suggestion b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.suggestion span { color: #ff7b72; font-weight: 950; }
+.quick-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 9px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.quick-row::-webkit-scrollbar { display: none; }
+.quick-label { color: var(--muted); font-size: 11px; font-weight: 850; white-space: nowrap; padding: 0 5px; }
+.quick-chip {
+  min-height: 34px;
+  border: 1px solid rgba(151, 205, 255, .18);
+  border-radius: 10px;
+  color: #dceeff;
+  background: rgba(255,255,255,.055);
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.quick-chip:hover, .quick-chip:focus-visible {
+  border-color: rgba(110, 213, 255, .62);
+  background: rgba(47, 139, 203, .18);
+  outline: 0;
 }
 .space-grid {
   position: absolute;
@@ -271,6 +319,7 @@ button { cursor: pointer; }
   inset: 0;
   z-index: 35;
   pointer-events: none;
+  clip-path: inset(0 0 136px 0);
 }
 .orbit-option {
   position: absolute;
@@ -357,7 +406,7 @@ button { cursor: pointer; }
   position: absolute;
   z-index: 55;
   left: 30px;
-  top: 200px;
+  top: 246px;
   width: min(300px, calc(100vw - 60px));
   color: #dceeff;
   padding: 14px 42px 14px 0;
@@ -381,7 +430,7 @@ button { cursor: pointer; }
   position: absolute;
   z-index: 50;
   right: 30px;
-  top: 200px;
+  top: 246px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -403,7 +452,7 @@ button { cursor: pointer; }
   position: absolute;
   z-index: 65;
   left: 50%;
-  bottom: max(34px, env(safe-area-inset-bottom));
+  bottom: max(8px, env(safe-area-inset-bottom));
   transform: translateX(-50%);
   width: min(980px, calc(100vw - 40px));
   min-height: 106px;
@@ -466,13 +515,10 @@ button { cursor: pointer; }
 @media (max-width: 900px) {
   .topbar { padding: 0 16px; }
   .stock { display: none; }
-  .search { width: min(58vw, 440px); }
-  .classic-helper { grid-template-columns: 1fr repeat(3, auto); }
-  .classic-copy span { display: none; }
-  .classic-action { padding: 0 11px; }
+  .top-note { display: none; }
   .step { min-width: 92px; }
-  .ai-status { top: 224px; left: 18px; }
-  .guide { top: 224px; right: 18px; }
+  .ai-status { top: 262px; left: 18px; }
+  .guide { top: 262px; right: 18px; }
   .orbit-option { width: 142px; min-height: 60px; }
   .result-dock { grid-template-columns: 1.3fr .7fr auto; }
   .result-dock .set-block { display: none; }
@@ -481,36 +527,25 @@ button { cursor: pointer; }
   .app { min-height: 0; }
   .topbar { height: 66px; gap: 10px; }
   .brand { font-size: 22px; }
-  .search { width: auto; flex: 1; }
-  .search input { height: 40px; font-size: 13px; padding-left: 12px; }
-  .search button { top: 5px; right: 5px; width: 30px; height: 30px; }
-  .classic-helper {
+  .market-search {
     top: 76px;
     width: calc(100vw - 18px);
-    min-height: 88px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: 124px;
     padding: 8px;
-    gap: 6px;
   }
-  .classic-copy {
-    grid-column: 1 / -1;
-    padding: 0 3px 2px;
-  }
-  .classic-copy b { font-size: 12px; }
-  .classic-copy span { display: none; }
-  .classic-action {
-    min-height: 38px;
-    padding: 0 5px;
-    font-size: 10px;
-    white-space: normal;
-  }
-  .stepper { top: 174px; width: calc(100vw - 20px); overflow-x: auto; justify-content: flex-start; }
+  .market-search-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 5px; }
+  .catalog-button, .search-submit { min-height: 44px; padding: 0 10px; font-size: 11px; }
+  .market-input-wrap input { height: 44px; padding: 0 10px; font-size: 12px; }
+  .quick-row { margin-top: 8px; gap: 5px; }
+  .quick-chip { min-height: 32px; padding: 0 10px; font-size: 10px; }
+  .quick-label { display: none; }
+  .stepper { top: 210px; width: calc(100vw - 20px); overflow-x: auto; justify-content: flex-start; }
   .step { min-width: 86px; height: 36px; font-size: 11px; }
   .orbital-field { inset: 66px 0 0; }
-  .ai-status { top: 218px; left: 14px; width: 230px; }
+  .ai-status { top: 254px; left: 14px; width: 230px; }
   .ai-status h1 { font-size: 18px; }
   .ai-status p { font-size: 11px; }
-  .guide { top: 224px; right: 12px; }
+  .guide { top: 260px; right: 12px; }
   .guide span { display: none; }
   .centerpiece { top: 52%; width: clamp(220px, 66vw, 310px); }
   .space-grid { top: 53%; width: 130vw; height: 66vw; }
@@ -527,7 +562,7 @@ button { cursor: pointer; }
   .orbit-option b { font-size: 12px; }
   .orbit-option small { font-size: 9px; }
   .result-dock {
-    bottom: max(16px, env(safe-area-inset-bottom));
+    bottom: max(6px, env(safe-area-inset-bottom));
     width: calc(100vw - 18px);
     min-height: 84px;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -540,6 +575,7 @@ button { cursor: pointer; }
   .dock-actions .action:not(.primary) { display: none; }
   .action { min-height: 44px; padding: 0 12px; font-size: 12px; }
   .toast { bottom: 108px; }
+  .orbit-layer { clip-path: inset(0 0 104px 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -550,21 +586,29 @@ button { cursor: pointer; }
 <main class="app">
   <header class="topbar">
     <div class="brand">РАДО<small>orbital tire system</small></div>
-    <label class="search">
-      <input id="aiSearch" placeholder="Напишите авто, размер или название" autocomplete="off">
-      <button id="searchBtn" aria-label="Найти">→</button>
-    </label>
+    <div class="top-note">Новые шины · цены склада · помощь с подбором</div>
     <div class="stock">склад подключен · <span id="stockCount">0</span> позиций</div>
   </header>
 
-  <section class="classic-helper" aria-label="Простой способ подбора">
-    <div class="classic-copy">
-      <b>Как вам удобнее подобрать шины?</b>
-      <span>Можно пройти по шагам — крутить орбиту необязательно.</span>
+  <section class="market-search" aria-label="Поиск шин">
+    <div class="market-search-row">
+      <button class="catalog-button" id="sizeCatalogBtn">Размеры</button>
+      <div class="market-input-wrap">
+        <input id="aiSearch" placeholder="Размер, бренд или модель — например 195/65 R15" autocomplete="off">
+        <div class="search-suggest" id="searchSuggest" hidden></div>
+      </div>
+      <button class="search-submit" id="searchBtn">Найти</button>
     </div>
-    <button class="classic-action primary" data-classic="size">Знаю размер</button>
-    <button class="classic-action" data-classic="vehicle">Знаю автомобиль</button>
-    <button class="classic-action" data-classic="budget">Сначала недорогие</button>
+    <div class="quick-row" aria-label="Быстрые фильтры">
+      <span class="quick-label">Быстрый выбор:</span>
+      <button class="quick-chip" data-quick-season="летняя">Летние</button>
+      <button class="quick-chip" data-quick-season="зимняя">Зимние</button>
+      <button class="quick-chip" data-quick-query="R15">R15</button>
+      <button class="quick-chip" data-quick-query="R16">R16</button>
+      <button class="quick-chip" data-quick-query="R17">R17</button>
+      <button class="quick-chip" data-quick-budget="5000">До 5 000 ₽</button>
+      <button class="quick-chip" data-quick-budget="7000">До 7 000 ₽</button>
+    </div>
   </section>
 
   <nav class="stepper" aria-label="Этапы подбора">
@@ -814,6 +858,32 @@ function render() {
   updateDock();
 }
 
+function matchingSearchRows(query) {
+  const needle = norm(query);
+  if (needle.length < 2) return [];
+  return ITEMS.filter((item) => {
+    const haystack = norm([item.title, item.brand, item.model, item.size].join(" "));
+    return haystack.includes(needle);
+  }).slice(0, 6);
+}
+
+function renderSuggestions(query) {
+  const box = $("searchSuggest");
+  const rows = matchingSearchRows(query);
+  if (!rows.length) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML = rows.map((item) => `
+    <button class="suggestion" data-suggest="${esc(item.article)}">
+      <b>${esc(item.title)}</b>
+      <span>${esc(item.priceText)}</span>
+    </button>
+  `).join("");
+  box.hidden = false;
+}
+
 function animate(now) {
   const delta = Math.min(40, now - lastFrame);
   lastFrame = now;
@@ -855,15 +925,30 @@ async function shareRequest() {
 document.querySelectorAll(".step").forEach((button) => {
   button.addEventListener("click", () => setMode(button.dataset.mode));
 });
-document.querySelectorAll("[data-classic]").forEach((button) => {
+$("sizeCatalogBtn").addEventListener("click", () => setMode("size"));
+document.querySelectorAll("[data-quick-season]").forEach((button) => {
   button.addEventListener("click", () => {
-    const action = button.dataset.classic;
-    if (action === "vehicle") {
-      $("aiSearch").placeholder = "Например: Lada Vesta 2020";
-      $("aiSearch").focus();
-      return;
-    }
-    setMode(action);
+    state = { mode: "result", size: "", season: button.dataset.quickSeason, budget: "", search: "", selectedArticle: "" };
+    $("aiSearch").value = "";
+    $("searchSuggest").hidden = true;
+    render();
+  });
+});
+document.querySelectorAll("[data-quick-query]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const query = button.dataset.quickQuery;
+    state = { mode: "result", size: "", season: "", budget: "", search: query, selectedArticle: "" };
+    $("aiSearch").value = query;
+    $("searchSuggest").hidden = true;
+    render();
+  });
+});
+document.querySelectorAll("[data-quick-budget]").forEach((button) => {
+  button.addEventListener("click", () => {
+    state = { mode: "result", size: "", season: "", budget: button.dataset.quickBudget, search: "", selectedArticle: "" };
+    $("aiSearch").value = "";
+    $("searchSuggest").hidden = true;
+    render();
   });
 });
 
@@ -891,8 +976,15 @@ $("orbitalField").addEventListener("keydown", (event) => {
 });
 
 function applySearch() {
-  state.search = $("aiSearch").value;
-  state.selectedArticle = "";
+  state = {
+    mode: "result",
+    size: "",
+    season: "",
+    budget: "",
+    search: $("aiSearch").value,
+    selectedArticle: ""
+  };
+  $("searchSuggest").hidden = true;
   setMode("result");
 }
 $("searchBtn").addEventListener("click", applySearch);
@@ -900,10 +992,31 @@ $("aiSearch").addEventListener("keydown", (event) => {
   if (event.key === "Enter") applySearch();
 });
 $("aiSearch").addEventListener("input", (event) => {
+  renderSuggestions(event.target.value);
   if (!event.target.value) {
     state.search = "";
     if (state.mode === "result") render();
   }
+});
+$("searchSuggest").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-suggest]");
+  if (!button) return;
+  const item = ITEMS.find((row) => row.article === button.dataset.suggest);
+  if (!item) return;
+  state = {
+    mode: "result",
+    size: item.size,
+    season: "",
+    budget: "",
+    search: "",
+    selectedArticle: item.article
+  };
+  $("aiSearch").value = item.title;
+  $("searchSuggest").hidden = true;
+  render();
+});
+document.addEventListener("pointerdown", (event) => {
+  if (!event.target.closest(".market-search")) $("searchSuggest").hidden = true;
 });
 $("orderBtn").addEventListener("click", copyRequest);
 $("shareBtn").addEventListener("click", shareRequest);
