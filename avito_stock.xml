@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<items date="2026-10-22T02:50:22" formatVersion="1">
+<items date="2026-10-22T04:20:26" formatVersion="1">
   <item><id>3151008</id><stock>0</stock></item>
   <item><id>3151006A</id><stock>0</stock></item>
   <item><id>1011563</id><stock>0</stock></item>
@@ -653,7 +653,6 @@
   <item><id>3220013282</id><stock>5</stock></item>
   <item><id>3220013289</id><stock>5</stock></item>
   <item><id>3220019760</id><stock>5</stock></item>
-  <item><id>16113830133</id><stock>6</stock></item>
   <item><id>3110080</id><stock>6</stock></item>
   <item><id>300H8006</id><stock>6</stock></item>
   <item><id>4367800A</id><stock>6</stock></item>
@@ -685,10 +684,11 @@
   <item><id>CTS293354</id><stock>6</stock></item>
   <item><id>CTS293368</id><stock>6</stock></item>
   <item><id>CTS293447</id><stock>6</stock></item>
+  <item><id>16113830133</id><stock>6</stock></item>
   <item><id>1352916661</id><stock>7</stock></item>
   <item><id>4381900</id><stock>7</stock></item>
-  <item><id>R4074</id><stock>7</stock></item>
   <item><id>4366800A</id><stock>7</stock></item>
+  <item><id>R4074</id><stock>7</stock></item>
   <item><id>4389800A</id><stock>7</stock></item>
   <item><id>1015878</id><stock>7</stock></item>
   <item><id>4373400</id><stock>7</stock></item>
@@ -825,23 +825,24 @@
   <item><id>1023363</id><stock>10</stock></item>
   <item><id>CTS269547</id><stock>10</stock></item>
   <item><id>650852099</id><stock>10</stock></item>
+  <item><id>3110092</id><stock>10</stock></item>
   <item><id>YSTX5R1514</id><stock>10</stock></item>
   <item><id>YSTX3R1914</id><stock>10</stock></item>
   <item><id>1019690</id><stock>10</stock></item>
-  <item><id>3110092</id><stock>10</stock></item>
   <item><id>221013438</id><stock>10</stock></item>
   <item><id>T732289A</id><stock>10</stock></item>
   <item><id>T732285A</id><stock>10</stock></item>
-  <item><id>TS72409</id><stock>10</stock></item>
   <item><id>T731729</id><stock>10</stock></item>
-  <item><id>4380800</id><stock>10</stock></item>
+  <item><id>TS72409</id><stock>10</stock></item>
   <item><id>16100120094</id><stock>10</stock></item>
+  <item><id>4380800</id><stock>10</stock></item>
+  <item><id>3341036030</id><stock>11</stock></item>
+  <item><id>4564000</id><stock>11</stock></item>
+  <item><id>4564100</id><stock>11</stock></item>
   <item><id>T730628A</id><stock>11</stock></item>
   <item><id>T730661A</id><stock>11</stock></item>
   <item><id>TS72205</id><stock>11</stock></item>
   <item><id>TS72386</id><stock>11</stock></item>
-  <item><id>4564000</id><stock>11</stock></item>
-  <item><id>4564100</id><stock>11</stock></item>
   <item><id>T732284A</id><stock>11</stock></item>
   <item><id>AB5158</id><stock>11</stock></item>
   <item><id>221018204A</id><stock>11</stock></item>
@@ -857,10 +858,10 @@
   <item><id>CTS276033</id><stock>11</stock></item>
   <item><id>650853069</id><stock>11</stock></item>
   <item><id>4389600A</id><stock>11</stock></item>
-  <item><id>1026045</id><stock>11</stock></item>
   <item><id>R6055</id><stock>11</stock></item>
   <item><id>1027618</id><stock>11</stock></item>
   <item><id>1026500</id><stock>11</stock></item>
+  <item><id>1026045</id><stock>11</stock></item>
   <item><id>F0384</id><stock>11</stock></item>
   <item><id>468326173</id><stock>11</stock></item>
   <item><id>0348169</id><stock>11</stock></item>
@@ -877,7 +878,6 @@
   <item><id>4377600</id><stock>11</stock></item>
   <item><id>S1452</id><stock>11</stock></item>
   <item><id>R4073</id><stock>11</stock></item>
-  <item><id>3341036030</id><stock>11</stock></item>
   <item><id>T743130</id><stock>11</stock></item>
   <item><id>T743139</id><stock>11</stock></item>
   <item><id>P200009A</id><stock>11</stock></item>
@@ -899,7 +899,6 @@
   <item><id>16114130000</id><stock>11</stock></item>
   <item><id>16114180000</id><stock>11</stock></item>
   <item><id>16114360000</id><stock>11</stock></item>
-  <item><id>16100120089</id><stock>11</stock></item>
   <item><id>LDTYWRXHP019</id><stock>11</stock></item>
   <item><id>LDTYWRXHP051</id><stock>11</stock></item>
   <item><id>16111570200</id><stock>11</stock></item>
@@ -907,10 +906,11 @@
   <item><id>16113830131</id><stock>11</stock></item>
   <item><id>16113830107</id><stock>11</stock></item>
   <item><id>16113830111</id><stock>11</stock></item>
-  <item><id>3220015708</id><stock>12</stock></item>
-  <item><id>3220019758</id><stock>12</stock></item>
+  <item><id>16100120089</id><stock>11</stock></item>
   <item><id>3530039039</id><stock>12</stock></item>
   <item><id>5900100</id><stock>12</stock></item>
+  <item><id>3220015708</id><stock>12</stock></item>
+  <item><id>3220019758</id><stock>12</stock></item>
   <item><id>TS78014</id><stock>12</stock></item>
   <item><id>TS77959</id><stock>12</stock></item>
   <item><id>T742972</id><stock>12</stock></item>
@@ -944,8 +944,8 @@
   <item><id>03134470000</id><stock>13</stock></item>
   <item><id>1031745</id><stock>13</stock></item>
   <item><id>16119470367</id><stock>13</stock></item>
-  <item><id>16111570164</id><stock>14</stock></item>
   <item><id>3220015703</id><stock>14</stock></item>
+  <item><id>16111570164</id><stock>14</stock></item>
   <item><id>RA185701</id><stock>14</stock></item>
   <item><id>3151029</id><stock>14</stock></item>
   <item><id>3151018</id><stock>14</stock></item>
@@ -1008,11 +1008,11 @@
   <item><id>T743402</id><stock>15</stock></item>
   <item><id>16114320000</id><stock>15</stock></item>
   <item><id>16117490000A</id><stock>15</stock></item>
-  <item><id>16100120313</id><stock>15</stock></item>
   <item><id>TS77939</id><stock>15</stock></item>
   <item><id>LDTYWRXHP038</id><stock>15</stock></item>
   <item><id>3220019752</id><stock>15</stock></item>
   <item><id>16119470014</id><stock>15</stock></item>
+  <item><id>16100120313</id><stock>15</stock></item>
   <item><id>3220010182</id><stock>16</stock></item>
   <item><id>16117090000A</id><stock>16</stock></item>
   <item><id>4365000</id><stock>16</stock></item>
@@ -1025,9 +1025,8 @@
   <item><id>YSS360R1906</id><stock>16</stock></item>
   <item><id>TS72276</id><stock>16</stock></item>
   <item><id>1033606</id><stock>16</stock></item>
-  <item><id>TS78005</id><stock>17</stock></item>
-  <item><id>16111570134</id><stock>17</stock></item>
-  <item><id>16111570178</id><stock>17</stock></item>
+  <item><id>T743141</id><stock>17</stock></item>
+  <item><id>P200031</id><stock>17</stock></item>
   <item><id>P200014A</id><stock>17</stock></item>
   <item><id>YSS360R2008A</id><stock>17</stock></item>
   <item><id>AB5157</id><stock>17</stock></item>
@@ -1036,11 +1035,12 @@
   <item><id>1361643884</id><stock>17</stock></item>
   <item><id>R4651</id><stock>17</stock></item>
   <item><id>CTS236324</id><stock>17</stock></item>
-  <item><id>T743141</id><stock>17</stock></item>
-  <item><id>P200031</id><stock>17</stock></item>
+  <item><id>TS78005</id><stock>17</stock></item>
+  <item><id>16111570134</id><stock>17</stock></item>
+  <item><id>16111570178</id><stock>17</stock></item>
   <item><id>1033445</id><stock>17</stock></item>
-  <item><id>TS77927</id><stock>17</stock></item>
   <item><id>3220015699</id><stock>17</stock></item>
+  <item><id>TS77927</id><stock>17</stock></item>
   <item><id>16119470355</id><stock>17</stock></item>
   <item><id>3151017</id><stock>18</stock></item>
   <item><id>3151005</id><stock>18</stock></item>
@@ -1049,15 +1049,16 @@
   <item><id>3151035</id><stock>18</stock></item>
   <item><id>R2853</id><stock>18</stock></item>
   <item><id>3293800</id><stock>18</stock></item>
-  <item><id>300H3038</id><stock>18</stock></item>
   <item><id>YSS360R1507</id><stock>18</stock></item>
+  <item><id>300H3038</id><stock>18</stock></item>
   <item><id>03150060000</id><stock>18</stock></item>
   <item><id>T730683</id><stock>18</stock></item>
   <item><id>T743131</id><stock>18</stock></item>
+  <item><id>16100120093</id><stock>19</stock></item>
+  <item><id>221008450</id><stock>19</stock></item>
   <item><id>1029596</id><stock>19</stock></item>
   <item><id>1352915285</id><stock>19</stock></item>
   <item><id>3220011497</id><stock>19</stock></item>
-  <item><id>16100120093</id><stock>19</stock></item>
   <item><id>4384600</id><stock>19</stock></item>
   <item><id>4373300</id><stock>19</stock></item>
   <item><id>1022710</id><stock>19</stock></item>
@@ -1069,7 +1070,6 @@
   <item><id>4384500</id><stock>19</stock></item>
   <item><id>CTS164411</id><stock>19</stock></item>
   <item><id>4380200</id><stock>19</stock></item>
-  <item><id>221008450</id><stock>19</stock></item>
   <item><id>YSS360R1805</id><stock>19</stock></item>
   <item><id>221013445</id><stock>19</stock></item>
   <item><id>YSS360R1502</id><stock>19</stock></item>
@@ -2141,7 +2141,6 @@
   <item><id>0259000871cmp</id><stock>5</stock></item>
   <item><id>0259002318cmp</id><stock>5</stock></item>
   <item><id>STS223923</id><stock>5</stock></item>
-  <item><id>1410057</id><stock>5</stock></item>
   <item><id>0259001117cmp</id><stock>5</stock></item>
   <item><id>1470007cmp</id><stock>5</stock></item>
   <item><id>82099663cmp</id><stock>5</stock></item>
@@ -2151,12 +2150,12 @@
   <item><id>231005545</id><stock>5</stock></item>
   <item><id>T1NEB90Y</id><stock>5</stock></item>
   <item><id>STS224564</id><stock>5</stock></item>
-  <item><id>УХ-00020626cmp</id><stock>6</stock></item>
   <item><id>Х0000014929cmp</id><stock>6</stock></item>
   <item><id>ъ1000030113cmp</id><stock>6</stock></item>
   <item><id>1410049</id><stock>6</stock></item>
   <item><id>Х0000013426</id><stock>6</stock></item>
   <item><id>Х0000018247</id><stock>6</stock></item>
+  <item><id>1410029</id><stock>6</stock></item>
   <item><id>2021301</id><stock>6</stock></item>
   <item><id>Р00000281cmp</id><stock>6</stock></item>
   <item><id>100H0102</id><stock>6</stock></item>
@@ -2172,6 +2171,7 @@
   <item><id>0259000166cmp</id><stock>6</stock></item>
   <item><id>1340004cmp</id><stock>6</stock></item>
   <item><id>U1NEB49Y</id><stock>6</stock></item>
+  <item><id>УХ-00020626cmp</id><stock>6</stock></item>
   <item><id>361972438</id><stock>7</stock></item>
   <item><id>7410004</id><stock>7</stock></item>
   <item><id>Р00000343cmp</id><stock>7</stock></item>
@@ -2231,7 +2231,6 @@
   <item><id>3003788</id><stock>9</stock></item>
   <item><id>1410044</id><stock>10</stock></item>
   <item><id>1430005</id><stock>10</stock></item>
-  <item><id>1410029</id><stock>10</stock></item>
   <item><id>361971869</id><stock>10</stock></item>
   <item><id>TTS72772</id><stock>10</stock></item>
   <item><id>YSRF19CR1604</id><stock>10</stock></item>
@@ -2246,17 +2245,17 @@
   <item><id>IR000008</id><stock>11</stock></item>
   <item><id>U3164421PLX</id><stock>11</stock></item>
   <item><id>0259000245cmp</id><stock>11</stock></item>
-  <item><id>TTS72823</id><stock>11</stock></item>
-  <item><id>Х0000026368cmp</id><stock>11</stock></item>
   <item><id>3003900</id><stock>11</stock></item>
   <item><id>3003903</id><stock>11</stock></item>
   <item><id>ъ1000015350</id><stock>11</stock></item>
   <item><id>Р100006240cmp</id><stock>11</stock></item>
   <item><id>TTS73056</id><stock>11</stock></item>
   <item><id>Х0000031146cmp</id><stock>11</stock></item>
+  <item><id>TTS72823</id><stock>11</stock></item>
+  <item><id>Х0000026368cmp</id><stock>11</stock></item>
   <item><id>7410009</id><stock>11</stock></item>
-  <item><id>3003567</id><stock>11</stock></item>
   <item><id>1410025</id><stock>11</stock></item>
+  <item><id>3003567</id><stock>11</stock></item>
   <item><id>651038183</id><stock>11</stock></item>
   <item><id>1345741484</id><stock>11</stock></item>
   <item><id>0259000149cmp</id><stock>11</stock></item>
@@ -2302,12 +2301,12 @@
   <item><id>TTS236819</id><stock>15</stock></item>
   <item><id>0259001967cmp</id><stock>15</stock></item>
   <item><id>3003846</id><stock>15</stock></item>
+  <item><id>2658030603</id><stock>16</stock></item>
   <item><id>Х0000013816cmp</id><stock>16</stock></item>
   <item><id>100H1005</id><stock>16</stock></item>
   <item><id>Х0000025782</id><stock>16</stock></item>
   <item><id>4430009</id><stock>16</stock></item>
   <item><id>U5282021PLX</id><stock>16</stock></item>
-  <item><id>2658030603</id><stock>16</stock></item>
   <item><id>3251011</id><stock>17</stock></item>
   <item><id>3250016</id><stock>17</stock></item>
   <item><id>1430009cmp</id><stock>17</stock></item>
@@ -2315,8 +2314,8 @@
   <item><id>0259002327</id><stock>18</stock></item>
   <item><id>679921243</id><stock>18</stock></item>
   <item><id>Х0000029410cmp</id><stock>18</stock></item>
-  <item><id>B1NEB51Y</id><stock>18</stock></item>
   <item><id>U1152011PLX</id><stock>18</stock></item>
+  <item><id>B1NEB51Y</id><stock>18</stock></item>
   <item><id>1391887404</id><stock>19</stock></item>
   <item><id>1410050</id><stock>19</stock></item>
   <item><id>1410003</id><stock>19</stock></item>
@@ -2350,6 +2349,7 @@
   <item><id>C200099</id><stock>23</stock></item>
   <item><id>0259003511</id><stock>23</stock></item>
   <item><id>622710609</id><stock>24</stock></item>
+  <item><id>93000379</id><stock>24</stock></item>
   <item><id>0259000902cmp</id><stock>24</stock></item>
   <item><id>1410021</id><stock>25</stock></item>
   <item><id>3220016911</id><stock>25</stock></item>
@@ -2368,7 +2368,6 @@
   <item><id>CTS112677</id><stock>28</stock></item>
   <item><id>CTS237324</id><stock>28</stock></item>
   <item><id>361973595</id><stock>28</stock></item>
-  <item><id>93000379</id><stock>28</stock></item>
   <item><id>STS225122cmp</id><stock>28</stock></item>
   <item><id>361973476</id><stock>29</stock></item>
   <item><id>1550000580</id><stock>29</stock></item>
@@ -2448,17 +2447,17 @@
   <item><id>201548-33</id><stock>40</stock></item>
   <item><id>93000348</id><stock>40</stock></item>
   <item><id>0259002283</id><stock>40</stock></item>
+  <item><id>2641032210</id><stock>40</stock></item>
   <item><id>1440873176</id><stock>40</stock></item>
   <item><id>2520030606</id><stock>40</stock></item>
   <item><id>93000289</id><stock>40</stock></item>
   <item><id>3220005415</id><stock>40</stock></item>
-  <item><id>2641032210</id><stock>40</stock></item>
   <item><id>TTS73163</id><stock>40</stock></item>
+  <item><id>TTS74749</id><stock>40</stock></item>
   <item><id>TTS236840</id><stock>40</stock></item>
   <item><id>B1NEB58Y</id><stock>40</stock></item>
   <item><id>C200101</id><stock>40</stock></item>
   <item><id>3250021</id><stock>40</stock></item>
-  <item><id>TTS74749</id><stock>40</stock></item>
   <item><id>361972064</id><stock>40</stock></item>
   <item><id>TTS236861</id><stock>40</stock></item>
   <item><id>4430001</id><stock>40</stock></item>
@@ -2518,5 +2517,5 @@
   <item><id>93000291</id><stock>40</stock></item>
   <item><id>1251003</id><stock>40</stock></item>
   <item><id>1440872962</id><stock>40</stock></item>
-  <item><id>YSS500R1803</id><stock>0</stock></item>
+  <item><id>1410057</id><stock>0</stock></item>
 </items>
